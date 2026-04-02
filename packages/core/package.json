@@ -21,6 +21,7 @@
    "scripts": {
       "build": "tsup",
       "dev": "tsup --watch",
+      "test:e2e": "vitest run tests/e2e",
       "test": "vitest run",
       "typecheck": "tsc --noEmit"
    },

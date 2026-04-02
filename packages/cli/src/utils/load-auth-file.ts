@@ -12,8 +12,8 @@ export async function loadAuthConfig(path: string) {
       throw new Error('Invalid config: expected `export default { auth: ... }`');
    }
 
-   if (!(auth instanceof SwiftAuth)) {
-      throw Error('auth must be an Instance of SwiftAuth');
+   if (!auth || typeof auth !== 'object' || !('config' in auth)) {
+      throw Error('Your auth file must export a SwiftAuth instance as the default export');
    }
 
    return auth;

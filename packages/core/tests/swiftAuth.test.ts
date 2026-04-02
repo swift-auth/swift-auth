@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { SwiftAuth } from '../core/swiftAuth.js';
-import { ParsedSwiftAuthConfig } from '../validator/config.validator.js';
+import { SwiftAuth } from '../src/core/swiftAuth.js';
+import { ParsedSwiftAuthConfig } from '../src/validator/config.validator.js';
 describe('SwiftAuth Instance creation test', () => {
    it('should create a instance with default values', () => {
       const expected: ParsedSwiftAuthConfig = {
