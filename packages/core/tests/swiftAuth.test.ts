@@ -1,9 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { SwiftAuth } from '../src/core/swiftAuth.js';
 import { ParsedSwiftAuthConfig } from '../src/validator/config.validator.js';
+import { mockAdapter } from './utils/mockAdapter.js';
 describe('SwiftAuth Instance creation test', () => {
    it('should create a instance with default values', () => {
       const expected: ParsedSwiftAuthConfig = {
+         database: mockAdapter,
          emailAndPassword: {
             enabled: true,
             autoSignIn: true,
@@ -13,6 +15,7 @@ describe('SwiftAuth Instance creation test', () => {
       };
 
       const auth = new SwiftAuth({
+         database: mockAdapter,
          emailAndPassword: {
             enabled: true,
          },
@@ -23,6 +26,7 @@ describe('SwiftAuth Instance creation test', () => {
 
    it('should create a instance with user defined values', () => {
       const expected: ParsedSwiftAuthConfig = {
+         database: mockAdapter,
          emailAndPassword: {
             enabled: true,
             autoSignIn: false,
@@ -32,6 +36,7 @@ describe('SwiftAuth Instance creation test', () => {
       };
 
       const auth = new SwiftAuth({
+         database: mockAdapter,
          emailAndPassword: {
             enabled: true,
             autoSignIn: false,
@@ -46,6 +51,7 @@ describe('SwiftAuth Instance creation test', () => {
    it('should throw error because enabled field is not defined by the user', () => {
       expect(() => {
          new SwiftAuth({
+            database: mockAdapter,
             emailAndPassword: {
                // @ts-expect-error
                enabled: 'yes',
