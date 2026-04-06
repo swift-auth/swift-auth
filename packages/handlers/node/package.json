@@ -1,6 +1,7 @@
 {
-   "name": "swift-auth",
-   "version": "0.0.1",
+   "name": "@swift-auth/node",
+   "version": "1.0.0",
+   "description": "",
    "private": false,
    "type": "module",
    "main": "./dist/index.cjs",
@@ -21,20 +22,20 @@
    "scripts": {
       "build": "tsup",
       "dev": "tsup --watch",
-      "test:e2e": "vitest run tests/e2e",
       "test": "vitest run",
       "typecheck": "tsc --noEmit"
    },
    "files": [
       "dist"
    ],
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "packageManager": "pnpm@10.33.0",
    "devDependencies": {
       "@types/node": "^25.5.0",
       "tsup": "^8.5.1",
       "typescript": "^6.0.2",
       "vitest": "^4.1.2"
-   },
-   "dependencies": {
-      "zod": "^4.3.6"
    }
 }

@@ -5,7 +5,7 @@ export class SwiftAuth {
    readonly config: ParsedSwiftAuthConfig;
 
    constructor(config: SwiftAuthConfig) {
-      const { database } = config;
+      const { database, socialProviders } = config;
 
       if (!database) {
          throw Error('Database adapter is not defined');
@@ -26,6 +26,7 @@ export class SwiftAuth {
       this.config = {
          database,
          ...result.data,
+         socialProviders,
       };
    }
 }
