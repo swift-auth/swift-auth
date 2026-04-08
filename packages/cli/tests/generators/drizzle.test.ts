@@ -5,6 +5,7 @@ import { mockAdapter } from '../utils/mockAdapter.js';
 describe('generate drizzle schema', () => {
    it('generate schema without verify table when verify email is false', () => {
       const auth = new SwiftAuth({
+         baseUrl: 'http://localhost:3000',
          database: mockAdapter,
          emailAndPassword: {
             enabled: true,
@@ -16,6 +17,7 @@ describe('generate drizzle schema', () => {
 
    it('generate schema with verify table when verify email is true', () => {
       const auth = new SwiftAuth({
+         baseUrl: 'http://localhost:3000',
          database: mockAdapter,
          emailAndPassword: {
             enabled: true,

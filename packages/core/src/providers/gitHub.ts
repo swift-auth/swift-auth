@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { OAuthProvider, OAuthTokens, OAuthUser } from './types.js';
+import { email } from 'zod/mini';
 
 const GITHUB_AUTHORIZE_ENDPOINT = 'https://github.com/login/oauth/authorize';
 const GITHUB_TOKEN_EXCHANGE_ENDPOINT = 'https://github.com/login/oauth/access_token';
@@ -22,12 +23,6 @@ interface GitHubConfig {
    login?: string;
 }
 
-interface GitHubTokenResponse {
-   access_token: string;
-   token_type: string;
-   scope: string;
-}
-
 interface UserPayload {
    id: number;
    name: string | null;
@@ -36,13 +31,22 @@ interface UserPayload {
    email: string | null;
 }
 
-type Email = {
-   email: string;
-   primary: boolean;
-   verified: boolean;
-   visibility: string;
-};
-type EmailPayload = Email[];
+const GitHubUserPayloadSchema = z.object({
+   id: z.number(),
+   name: z.string(),
+   login: z.string().optional(),
+   avatar_url: z.string(),
+   email: z.string().nullable(),
+});
+
+const GitHubEmailPayloadSchema = z.array(
+   z.object({
+      email: z.email(),
+      primary: z.boolean(),
+      verified: z.boolean(),
+      visibility: z.string(),
+   }),
+);
 
 const GitHubConfigSchema = z.object({
    clientId: z.string(),
@@ -50,6 +54,12 @@ const GitHubConfigSchema = z.object({
    scopes: z.array(z.string()).default(['read:user', 'user:email']),
    allowSignup: z.boolean().default(true),
    login: z.string().optional(),
+});
+
+const GitHubTokenResponseSchema = z.object({
+   access_token: z.string(),
+   token_type: z.string().default('Bearer'),
+   scope: z.string().optional(),
 });
 
 export function GitHubProvider(config: GitHubConfig): OAuthProvider {
@@ -92,7 +102,23 @@ export function GitHubProvider(config: GitHubConfig): OAuthProvider {
             throw new Error(`GitHub token exchange failed: ${res.statusText}`);
          }
 
-         const data = (await res.json()) as GitHubTokenResponse;
+         const raw = await res.json();
+         const result = GitHubTokenResponseSchema.safeParse(raw);
+
+         if (!result.success) {
+            if (typeof raw == 'object' && raw !== null && 'error' in raw) {
+               throw new Error(raw.error_description || raw.error);
+            }
+
+            let errorMsg = '';
+
+            result.error.issues.map((issue) => {
+               errorMsg += `${issue.path}: ${issue.message}\n`;
+            });
+            throw Error(errorMsg);
+         }
+
+         const data = result.data;
 
          return {
             accessToken: data.access_token,
@@ -118,7 +144,21 @@ export function GitHubProvider(config: GitHubConfig): OAuthProvider {
             throw new Error(`GitHub user fetch failed: ${userRes.statusText}`);
          }
 
-         const user = (await userRes.json()) as UserPayload;
+         let raw = await userRes.json();
+         let userDataResult = GitHubUserPayloadSchema.safeParse(raw);
+
+         if (!userDataResult.success) {
+            if (typeof raw == 'object' && raw !== null && 'error' in raw) {
+               throw new Error(raw.error_description || raw.error);
+            } else {
+               let errMsg = '';
+               userDataResult.error.issues.map((issue) => {
+                  errMsg += `${issue.path}: ${issue.message}\n`;
+               });
+               throw Error(errMsg);
+            }
+         }
+         const user = userDataResult.data;
 
          const emailRes = await fetch(GITHUB_EMAIL_ENDPOINT, {
             headers: {
@@ -131,7 +171,22 @@ export function GitHubProvider(config: GitHubConfig): OAuthProvider {
             throw new Error(`GitHub email fetch failed: ${emailRes.statusText}`);
          }
 
-         const emails = (await emailRes.json()) as EmailPayload;
+         raw = await emailRes.json();
+         let result = GitHubEmailPayloadSchema.safeParse(raw);
+
+         if (!result.success) {
+            if (typeof raw == 'object' && raw !== null && 'error' in raw) {
+               throw new Error(raw.error_description || raw.error);
+            } else {
+               let errMsg = '';
+               result.error.issues.map((issue) => {
+                  errMsg += `${issue.path}: ${issue.message}\n`;
+               });
+               throw Error(errMsg);
+            }
+         }
+
+         const emails = result.data;
 
          if (emails.length == 0) {
             throw Error('No emails connected to users GitHub');

@@ -5,6 +5,7 @@ import { mockAdapter } from './utils/mockAdapter.js';
 describe('SwiftAuth Instance creation test', () => {
    it('should create a instance with default values', () => {
       const expected: ParsedSwiftAuthConfig = {
+         baseUrl: 'http://localhost:3000',
          database: mockAdapter,
          emailAndPassword: {
             enabled: true,
@@ -15,6 +16,7 @@ describe('SwiftAuth Instance creation test', () => {
       };
 
       const auth = new SwiftAuth({
+         baseUrl: 'http://localhost:3000',
          database: mockAdapter,
          emailAndPassword: {
             enabled: true,
@@ -26,6 +28,7 @@ describe('SwiftAuth Instance creation test', () => {
 
    it('should create a instance with user defined values', () => {
       const expected: ParsedSwiftAuthConfig = {
+         baseUrl: 'http://localhost:3000',
          database: mockAdapter,
          emailAndPassword: {
             enabled: true,
@@ -36,6 +39,7 @@ describe('SwiftAuth Instance creation test', () => {
       };
 
       const auth = new SwiftAuth({
+         baseUrl: 'http://localhost:3000',
          database: mockAdapter,
          emailAndPassword: {
             enabled: true,

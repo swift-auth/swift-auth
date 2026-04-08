@@ -15,7 +15,7 @@ export interface SocialProvidersConfig {
 
 export interface SwiftAuthConfig {
    baseUrl: string;
-   emailAndPassword: EmailAndPasswordConfig;
+   emailAndPassword?: EmailAndPasswordConfig;
    database: DatabaseAdapter;
    socialProviders?: SocialProvidersConfig;
 }
