@@ -10,6 +10,13 @@ const emailAndPasswordSchema = z.object({
    minPasswordLength: z.number().default(8),
 });
 
+const cookieSchema = z.object({
+   name: z.string().default('swift_auth_session_token'),
+   secure: z.boolean().default(true),
+   domain: z.string().optional(),
+   sameSite: z.enum(['lax', 'strict', 'none']).default('lax'),
+});
+
 export const SwiftAuthConfigSchema = z.object({
    session: z
       .object({
@@ -20,6 +27,7 @@ export const SwiftAuthConfigSchema = z.object({
       }),
    baseUrl: z.url(),
    emailAndPassword: emailAndPasswordSchema.optional(),
+   cookies: cookieSchema.optional(),
 });
 
 export type ParsedSwiftAuthConfig = z.infer<typeof SwiftAuthConfigSchema> & {

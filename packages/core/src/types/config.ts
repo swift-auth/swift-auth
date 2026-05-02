@@ -17,10 +17,19 @@ export interface SessionConfig {
    expiry?: number;
 }
 
+export interface CookieConfig {
+   name?: string;
+   secure?: boolean;
+   sameSite?: 'lax' | 'strict' | 'none';
+   path?: string;
+   domain?: string;
+}
+
 export interface SwiftAuthConfig {
    baseUrl: string;
    session?: SessionConfig;
    emailAndPassword?: EmailAndPasswordConfig;
    database: DatabaseAdapter;
    socialProviders?: SocialProvidersConfig;
+   cookies?: CookieConfig;
 }
