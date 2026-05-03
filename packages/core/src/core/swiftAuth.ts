@@ -101,7 +101,7 @@ export class SwiftAuth {
             identifier: user.email,
             expiresAt: new Date(Date.now() + this.config.emailAndPassword.verificationTokenExpiry),
          });
-
+         //call the verification callback provided by the user. I am letting the user decide how to share the token with the user
          await this.config.emailAndPassword.verificationCallback({
             name: user.name,
             email: user.email,
@@ -145,7 +145,7 @@ export class SwiftAuth {
          });
 
          return {
-            code: 'SIGNUP_SUCCESS',
+            code: 'SIGNUP_SUCCESS_AND_AUTO_SIGNIN',
             message: 'User created and signed in',
             session,
             user,
@@ -313,6 +313,7 @@ export class SwiftAuth {
          expiresAt: new Date(Date.now() + this.config.emailAndPassword.verificationTokenExpiry),
       });
 
+      // calling the forget password callback provided by the user. letting the user decide how they want the token sharing system
       await this.config.emailAndPassword.forgotPasswordCallback({
          name: user.name,
          email: user.email,
@@ -399,15 +400,114 @@ export class SwiftAuth {
       };
    }
 
+   //using state for CRSF Protection the sate should be set as a cookie when we will receive back when hitting the callback url
    async getSocialAuthRedirectUrl(provider: 'google' | 'github') {
-      const OAuthProvider = this.config?.socialProviders?.[provider];
-
-      if (!OAuthProvider) {
+      const oauthProvider = this.config?.socialProviders?.[provider];
+      if (!oauthProvider) {
          throw new SwiftAuthError(
             'PROVIDER_NOT_CONFIGURED',
-            'Please the configure the oauth provider to make it work',
+            `${provider} provider is not configured`,
          );
       }
+      const state = crypto.randomUUID();
+      const redirectUrl = `${this.config.baseUrl}/api/auth/${provider}/callback`;
+      const authUrl = oauthProvider.getAuthUrl(state, redirectUrl);
+      return { authUrl, state };
+   }
+
+   async oauthCallback(
+      provider: 'google' | 'github',
+      code: string,
+      meta?: { userAgent?: string; ipAddress?: string },
+   ) {
+      const oauthProvider = this.config?.socialProviders?.[provider];
+      if (!oauthProvider) {
+         throw new SwiftAuthError(
+            'PROVIDER_NOT_CONFIGURED',
+            `${provider} provider is not configured`,
+         );
+      }
+
+      const redirectUrl = `${this.config.baseUrl}/api/auth/${provider}/callback`;
+
+      // exchange code for tokens
+      const tokens = await oauthProvider.exchangeCode(code, redirectUrl);
+
+      // get user info from provider
+      const oauthUser = await oauthProvider.getUserInfo(tokens);
+
+      // find or create user
+      let user = await this.config.database.findUserByEmail(oauthUser.email);
+      if (!user) {
+         // new user — create user and account
+         user = await this.config.database.createUser({
+            email: oauthUser.email,
+            name: oauthUser.name,
+            image: oauthUser.image,
+            emailVerified: oauthUser.emailVerified,
+         });
+
+         await this.config.database.createAccount({
+            userId: user.id,
+            accountId: oauthUser.id,
+            providerId: provider,
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
+            idToken: tokens.idToken,
+            accessTokenExpiresAt: tokens.expiresIn
+               ? new Date(Date.now() + tokens.expiresIn * 1000)
+               : null,
+            refreshTokenExpiresAt: null,
+            scope: tokens.scope,
+            password: null,
+         });
+      } else {
+         // existing user — update their tokens
+         const account = await this.config.database.findAccountByUserId(user.id, provider);
+         if (!account) {
+            // user exists but no account for this provider yet — create it
+            await this.config.database.createAccount({
+               userId: user.id,
+               accountId: oauthUser.id,
+               providerId: provider,
+               accessToken: tokens.accessToken,
+               refreshToken: tokens.refreshToken,
+               idToken: tokens.idToken,
+               accessTokenExpiresAt: tokens.expiresIn
+                  ? new Date(Date.now() + tokens.expiresIn * 1000) //google return expire time in seconds so  * 1000 converts to ms
+                  : null,
+               refreshTokenExpiresAt: null,
+               scope: tokens.scope,
+               password: null,
+            });
+         } else {
+            // account exists — update tokens
+            await this.config.database.updateAccount(account.id, {
+               accessToken: tokens.accessToken,
+               refreshToken: tokens.refreshToken,
+               accessTokenExpiresAt: tokens.expiresIn
+                  ? new Date(Date.now() + tokens.expiresIn * 1000)
+                  : null,
+               scope: tokens.scope,
+            });
+         }
+      }
+
+      // create session
+      const session = await this.config.database.createSession({
+         userId: user.id,
+         token: crypto.randomUUID(),
+         expiresAt: new Date(Date.now() + this.config.session.expiry),
+         userAgent: meta?.userAgent ?? null,
+         ipAddress: meta?.ipAddress ?? null,
+      });
+
+      return {
+         code: 'OAUTH_SUCCESS',
+         message: `Signed in with ${provider} successfully`,
+         session,
+         user,
+      };
    }
 }
 /* 

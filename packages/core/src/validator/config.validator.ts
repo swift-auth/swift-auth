@@ -1,6 +1,5 @@
 import * as z from 'zod';
 import { DatabaseAdapter } from '../types/adapter.js';
-
 import { SocialProvidersConfig } from '../types/config.js';
 
 const emailAndPasswordSchema = z.object({
@@ -8,7 +7,7 @@ const emailAndPasswordSchema = z.object({
    autoSignIn: z.boolean().default(true),
    verifyEmail: z.boolean().default(false),
    minPasswordLength: z.number().default(8),
-   verificationTokenExpiry: z.number().default(1000 * 60 * 60), //1hour
+   verificationTokenExpiry: z.number().default(1000 * 60 * 60),
 });
 
 const cookieSchema = z.object({
@@ -31,9 +30,19 @@ export const SwiftAuthConfigSchema = z.object({
    cookies: cookieSchema.optional(),
 });
 
-export type ParsedSwiftAuthConfig = z.infer<typeof SwiftAuthConfigSchema> & {
+export type ParsedSwiftAuthConfig = Omit<z.infer<typeof SwiftAuthConfigSchema>, 'cookies'> & {
    database: DatabaseAdapter;
    socialProviders?: SocialProvidersConfig;
+   // override cookies as required — constructor always sets all fields
+   cookies: {
+      name: string;
+      secure: boolean;
+      domain: string;
+      sameSite: 'lax' | 'strict' | 'none';
+   };
+   session: {
+      expiry: number;
+   };
    emailAndPassword?: z.infer<typeof emailAndPasswordSchema> & {
       verificationCallback?: (user: {
          name: string;
