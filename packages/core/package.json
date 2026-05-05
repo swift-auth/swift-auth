@@ -1,6 +1,19 @@
 {
    "name": "swift-auth",
-   "version": "0.0.1",
+   "version": "0.1.0",
+   "description": "A lightweight authentication library",
+   "author": "Dipan Chakraborty",
+   "license": "MIT",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/dipan-ck/swift-auth"
+   },
+   "keywords": [
+      "auth",
+      "authentication",
+      "jwt",
+      "oauth"
+   ],
    "private": false,
    "type": "module",
    "main": "./dist/index.cjs",

@@ -17,6 +17,18 @@ export const auth = new SwiftAuth({
       },
    },
 
+   session: {
+      //expiry value will be added to Date.now()
+      expiry: 1000 * 60 * 60 * 48, //48 hours
+   },
+   //httpOnly will always be true for security
+   cookies: {
+      name: 'swift',
+      secure: true,
+      sameSite: 'lax',
+      domain: 'localhost',
+   },
+
    socialProviders: {
       google: googleProvider({
          clientId: process.env.GOOGLE_CLIENT_ID!,
