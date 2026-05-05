@@ -1,0 +1,28 @@
+import type { Metadata } from 'next';
+import { Geist_Mono } from 'next/font/google';
+import './globals.css';
+
+const geistMono = Geist_Mono({
+   variable: '--font-mono',
+   subsets: ['latin'],
+});
+
+export const metadata: Metadata = {
+   title: 'swift-auth',
+   description: 'A lightweight, type-safe authentication library',
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+   return (
+      <html lang="en" className={`${geistMono.variable} h-full antialiased`}>
+         <head>
+            <link
+               href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@8..144,300..700&display=swap"
+               rel="stylesheet"
+            />
+         </head>
+
+         <body className="min-h-full bg-background text-foreground font-sans">{children}</body>
+      </html>
+   );
+}
