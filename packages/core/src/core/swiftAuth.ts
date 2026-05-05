@@ -1,47 +1,46 @@
 import bcrypt from 'bcryptjs';
 import { SwiftAuthConfig } from '../types/config.js';
-import { ParsedSwiftAuthConfig, SwiftAuthConfigSchema } from '../validator/config.validator.js';
+import { ParsedSwiftAuthConfig } from '../validator/config.validator.js';
 import { SwiftAuthError } from './SwiftError.js';
+import { Session, User } from '../types/auth.js';
 
 export class SwiftAuth {
    readonly config: ParsedSwiftAuthConfig;
 
    constructor(config: SwiftAuthConfig) {
-      const { database, socialProviders } = config;
+      if (!config.database) throw new Error('Database adapter is not defined');
 
-      if (!database) {
-         throw Error('Database adapter is not defined');
-      }
+      if (!config.baseUrl) throw new Error('baseUrl is required');
 
-      const result = SwiftAuthConfigSchema.safeParse(config);
-
-      if (result.error) {
-         let errorMessage = '';
-         let count = 1;
-         for (const issue of result.error.issues) {
-            errorMessage += `ERROR ${count} :${issue.path.join('.')} ${issue.message}\n`;
-            count++;
-         }
-         throw Error(errorMessage);
-      }
-
-      if (
-         result.data?.emailAndPassword?.verifyEmail &&
-         !config.emailAndPassword?.verificationCallback
-      ) {
+      if (config.emailAndPassword?.verifyEmail && !config.emailAndPassword?.verificationCallback) {
          throw new Error('verificationCallback is required when verifyEmail is true');
       }
 
       this.config = {
-         database,
-         ...result.data,
-         socialProviders,
-         cookies: {
-            name: result.data.cookies?.name ?? 'swift_auth_session_token',
-            secure: result.data.cookies?.secure ?? true,
-            domain: setDomain(result.data.cookies?.domain ?? result.data.baseUrl),
-            sameSite: result.data.cookies?.sameSite ?? 'lax',
+         baseUrl: config.baseUrl,
+         database: config.database,
+         socialProviders: config.socialProviders,
+         session: {
+            expiry: config.session?.expiry ?? 1000 * 60 * 60 * 24, //defaults to 1 hour
          },
+         cookies: {
+            name: config.cookies?.name ?? 'swift_auth_session_token',
+            secure: config.cookies?.secure ?? true,
+            domain: config.cookies?.domain ?? new URL(config.baseUrl).hostname,
+            sameSite: config.cookies?.sameSite ?? 'lax',
+         },
+         emailAndPassword: config.emailAndPassword
+            ? {
+                 enabled: config.emailAndPassword.enabled,
+                 autoSignIn: config.emailAndPassword.autoSignIn ?? true,
+                 verifyEmail: config.emailAndPassword.verifyEmail ?? false,
+                 minPasswordLength: config.emailAndPassword.minPasswordLength ?? 8,
+                 verificationTokenExpiry:
+                    config.emailAndPassword.verificationTokenExpiry ?? 1000 * 60 * 60,
+                 verificationCallback: config.emailAndPassword.verificationCallback,
+                 forgotPasswordCallback: config.emailAndPassword.forgotPasswordCallback,
+              }
+            : undefined,
       };
    }
 
@@ -51,6 +50,10 @@ export class SwiftAuth {
       password: string,
       meta?: { userAgent?: string; ipAddress?: string },
    ) {
+      if (!name || !email || !password) {
+         throw new SwiftAuthError('MISSING_FIELDS', 'plesse fill all the missing fields');
+      }
+
       if (!this.config.emailAndPassword?.enabled) {
          throw new SwiftAuthError(
             'EMAIL_PASSWORD_DISABLED',
@@ -167,6 +170,9 @@ export class SwiftAuth {
       password: string,
       meta?: { userAgent?: string; ipAddress?: string },
    ) {
+      if (!email || !password) {
+         throw new SwiftAuthError('MISSING_FIELDS', 'plesse fill all the missing fields');
+      }
       if (!this.config.emailAndPassword?.enabled) {
          throw new SwiftAuthError(
             'EMAIL_PASSWORD_DISABLED',
@@ -423,7 +429,13 @@ export class SwiftAuth {
       provider: 'google' | 'github',
       code: string,
       meta?: { userAgent?: string; ipAddress?: string },
-   ) {
+   ): Promise<{
+      code: string;
+      message: string;
+      user: User;
+      session: Session;
+      redirectUrl: string;
+   }> {
       const oauthProvider = this.config?.socialProviders?.[provider];
       if (!oauthProvider) {
          throw new SwiftAuthError(
@@ -511,20 +523,8 @@ export class SwiftAuth {
          message: `Signed in with ${provider} successfully`,
          session,
          user,
+         redirectUrl: oauthUser.redirectUrl,
       };
-   }
-}
-
-/* 
-if user did not set any domain in the cookie options then we will take the baseUrl's hostname 
-as the domain to set for cookie and in the parameter if already passed a hostname then the catch will just
-retuen the same value passed to it
-*/
-function setDomain(baseUrl: string): string {
-   try {
-      return new URL(baseUrl).hostname;
-   } catch {
-      return baseUrl;
    }
 }
 

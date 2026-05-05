@@ -18,10 +18,12 @@ export interface GitHubConfig {
    clientId: string;
    clientSecret: string;
    scopes?: string[];
+   redirectUrl: string;
 }
 
 export const gitHubConfigSchema = z.object({
    clientId: z.string(),
+   redirectUrl: z.string(),
    clientSecret: z.string(),
    scopes: z.array(z.string()).default(['read:user', 'user:email']),
 });
@@ -136,6 +138,7 @@ export function gitHubProvider(config: GitHubConfig): OAuthProvider {
             email,
             name: user.name,
             image: user.avatar_url ?? null,
+            redirectUrl: config.redirectUrl,
             emailVerified: true, // github emails are always verified
          };
       },

@@ -13,6 +13,7 @@ export interface OAuthUser {
    name: string;
    image: string | null;
    emailVerified: boolean;
+   redirectUrl: string;
 }
 
 export interface OAuthProvider {

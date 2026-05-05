@@ -8,6 +8,7 @@ const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 export interface GoogleConfig {
    clientId: string;
    clientSecret: string;
+   redirectUrl: string;
    scopes?: string[];
    prompt?: 'consent' | 'select_account' | 'none' | 'login';
    accessType?: 'online' | 'offline';
@@ -16,6 +17,7 @@ export interface GoogleConfig {
 export const googleConfigSchema = z.object({
    clientId: z.string(),
    clientSecret: z.string(),
+   redirectUrl: z.string(),
    scopes: z.array(z.string()).default(['openid', 'email', 'profile']),
    prompt: z.enum(['consent', 'select_account', 'none', 'login']).default('consent'),
    accessType: z.enum(['online', 'offline']).default('offline'),
@@ -97,6 +99,7 @@ export function googleProvider(config: GoogleConfig): OAuthProvider {
             name: payload.name,
             image: payload.picture ?? null,
             emailVerified: payload.email_verified,
+            redirectUrl: config.redirectUrl,
          };
       },
    };

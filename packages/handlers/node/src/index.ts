@@ -1,5 +1,5 @@
 import { SwiftAuth, SwiftAuthError } from 'swift-auth';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // ── error helper ───────────────────────────────────────────────────────────────
 function sendError(res: Response, err: unknown) {
@@ -32,13 +32,18 @@ export function toNodeHandler(auth: SwiftAuth) {
       );
    }
 
-   return async function (req: Request, res: Response) {
+   return async function (req: Request, res: Response, next: NextFunction) {
       const { path, method } = req;
+      // not blocking any non auth paths
+      if (!path.startsWith('/api/auth')) {
+         return next();
+      }
 
       // ── POST /api/auth/signup ──────────────────────────────────────────────
       if (path === '/api/auth/signup' && method === 'POST') {
          try {
             const { name, email, password } = req.body;
+
             const result = await auth.emailSignUp(name, email, password, {
                userAgent: req.headers['user-agent'],
                ipAddress: req.ip,
@@ -299,7 +304,7 @@ export function toNodeHandler(auth: SwiftAuth) {
             });
 
             // redirect user to the frontend after successful OAuth
-            return res.redirect(auth.config.baseUrl);
+            return res.redirect(result?.redirectUrl);
          } catch (err) {
             return sendError(res, err);
          }

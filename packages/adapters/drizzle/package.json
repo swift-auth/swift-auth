@@ -29,10 +29,10 @@
       "dist"
    ],
    "dependencies": {
-      "nanoid": "^5.1.7",
-      "swift-auth": "workspace:*"
+      "nanoid": "^5.1.7"
    },
    "devDependencies": {
+      "swift-auth": "workspace:*",
       "@types/node": "^25.5.0",
       "drizzle-kit": "^0.31.10",
       "drizzle-orm": "latest",

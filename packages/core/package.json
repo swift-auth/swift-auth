@@ -16,6 +16,16 @@
             "types": "./dist/index.d.ts",
             "default": "./dist/index.cjs"
          }
+      },
+      "./providers": {
+         "import": {
+            "types": "./dist/providers/index.d.ts",
+            "default": "./dist/providers/index.js"
+         },
+         "require": {
+            "types": "./dist/providers/index.d.ts",
+            "default": "./dist/providers/index.cjs"
+         }
       }
    },
    "scripts": {

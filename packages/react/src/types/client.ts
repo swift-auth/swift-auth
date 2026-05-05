@@ -102,7 +102,7 @@ export interface Account {
    updatedAt: Date;
 }
 
-export interface SwiftAuthClient {
+export interface SwiftAuthClientApi {
    emailSignUp(data: EmailSignUp): Promise<EmailSignUpResponse>;
    emailSignIn(data: EmailSignIn): Promise<EmailSignInResponse>;
    verifyEmail(token: string): Promise<VerifyEmailResponse>;
