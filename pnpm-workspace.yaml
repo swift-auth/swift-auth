@@ -1,4 +1,7 @@
 packages:
-   - 'packages/*'
-   - 'packages/adapters/*'
-   - 'packages/handlers/*'
+  - 'packages/*'
+  - 'packages/adapters/*'
+  - 'packages/handlers/*'
+allowBuilds:
+  better-sqlite3: true
+  esbuild: false

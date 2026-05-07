@@ -1,42 +1,61 @@
 import { nanoid } from 'nanoid';
-import { accountTable, sessionTable, userTable, verificationTable } from './schema.js';
-import { DrizzleAdapterOptions, DrizzleDB } from './types.js';
+import type { DrizzleAdapterOptions, Providers } from './types.js';
 import type { DatabaseAdapter } from 'swift-auth';
 import { and, eq } from 'drizzle-orm';
+import * as sqlSchema from './schemas/sql.js';
+import * as postgresSchema from './schemas/postgres.js';
+import * as sqliteSchema from './schemas/sqlite.js';
 
-const defaultSchema = {
-   user: userTable,
-   account: accountTable,
-   verification: verificationTable,
-   session: sessionTable,
-};
+/*
+In Drizzle the schema definition changes based on the provider used so we need to check the provider used by the user
+and based on that select the tables all schemas are in /src/schemas
+*/
+function getTables(provider: Providers) {
+   if (provider === 'mysql') {
+      return {
+         user: sqlSchema.userTable,
+         session: sqlSchema.sessionTable,
+         account: sqlSchema.accountTable,
+         verification: sqlSchema.verificationTable,
+      };
+   }
 
-const defaultOptions: DrizzleAdapterOptions = {
-   schema: defaultSchema,
-};
+   if (provider === 'postgres') {
+      return {
+         user: postgresSchema.userTable,
+         session: postgresSchema.sessionTable,
+         account: postgresSchema.accountTable,
+         verification: postgresSchema.verificationTable,
+      };
+   }
 
-export function drizzleAdapter(
-   db: DrizzleDB,
-   options: DrizzleAdapterOptions = defaultOptions,
-): DatabaseAdapter {
-   const tables = {
-      user: options?.schema?.user ?? userTable,
-      session: options?.schema?.session ?? sessionTable,
-      account: options?.schema?.account ?? accountTable,
-      verification: options?.schema?.verification ?? verificationTable,
+   return {
+      user: sqliteSchema.userTable,
+      session: sqliteSchema.sessionTable,
+      account: sqliteSchema.accountTable,
+      verification: sqliteSchema.verificationTable,
    };
+}
+
+/*
+IMPORTANT POINT: In some methods you can see that based on the provider is mysql or not we are fetching the results 
+because mysql doesn't support .returning() so we need to do 2nd call to fecth the new data. sqllite and postgres do support .returning()
+*/
+
+export function drizzleAdapter(adapterOptions: DrizzleAdapterOptions): DatabaseAdapter {
+   const { db, provider } = adapterOptions;
+   const tables = getTables(provider);
+   const isMysql = provider === 'mysql';
 
    return {
       createUser: async (user) => {
-         const result = await db
-            .insert(tables.user)
-            .values({
-               id: nanoid(),
-               ...user,
-               createdAt: new Date(),
-               updatedAt: new Date(),
-            })
-            .returning();
+         const values = { id: nanoid(), ...user, createdAt: new Date(), updatedAt: new Date() };
+         if (isMysql) {
+            await db.insert(tables.user).values(values);
+            const result = await db.select().from(tables.user).where(eq(tables.user.id, values.id));
+            return result[0];
+         }
+         const result = await db.insert(tables.user).values(values).returning();
          return result[0];
       },
 
@@ -51,25 +70,31 @@ export function drizzleAdapter(
       },
 
       updateUser: async (id, data) => {
+         const payload = { ...data, updatedAt: new Date() };
+         if (isMysql) {
+            await db.update(tables.user).set(payload).where(eq(tables.user.id, id));
+            const result = await db.select().from(tables.user).where(eq(tables.user.id, id));
+            return result[0];
+         }
          const result = await db
             .update(tables.user)
-            .set({ ...data, updatedAt: new Date() })
+            .set(payload)
             .where(eq(tables.user.id, id))
             .returning();
          return result[0];
       },
 
-      // session operations
       createSession: async (session) => {
-         const result = await db
-            .insert(tables.session)
-            .values({
-               id: nanoid(),
-               ...session,
-               createdAt: new Date(),
-               updatedAt: new Date(),
-            })
-            .returning();
+         const values = { id: nanoid(), ...session, createdAt: new Date(), updatedAt: new Date() };
+         if (isMysql) {
+            await db.insert(tables.session).values(values);
+            const result = await db
+               .select()
+               .from(tables.session)
+               .where(eq(tables.session.id, values.id));
+            return result[0];
+         }
+         const result = await db.insert(tables.session).values(values).returning();
          return result[0];
       },
 
@@ -89,24 +114,30 @@ export function drizzleAdapter(
          await db.delete(tables.session).where(eq(tables.session.userId, userId));
       },
 
-      // account operations
       createAccount: async (account) => {
-         const result = await db
-            .insert(tables.account)
-            .values({
-               id: nanoid(),
-               ...account,
-               createdAt: new Date(),
-               updatedAt: new Date(),
-            })
-            .returning();
+         const values = { id: nanoid(), ...account, createdAt: new Date(), updatedAt: new Date() };
+         if (isMysql) {
+            await db.insert(tables.account).values(values);
+            const result = await db
+               .select()
+               .from(tables.account)
+               .where(eq(tables.account.id, values.id));
+            return result[0];
+         }
+         const result = await db.insert(tables.account).values(values).returning();
          return result[0];
       },
 
       updateAccount: async (id, data) => {
+         const payload = { ...data, updatedAt: new Date() };
+         if (isMysql) {
+            await db.update(tables.account).set(payload).where(eq(tables.account.id, id));
+            const result = await db.select().from(tables.account).where(eq(tables.account.id, id));
+            return result[0];
+         }
          const result = await db
             .update(tables.account)
-            .set({ ...data, updatedAt: new Date() })
+            .set(payload)
             .where(eq(tables.account.id, id))
             .returning();
          return result[0];
@@ -122,18 +153,23 @@ export function drizzleAdapter(
          return result[0] ?? null;
       },
 
-      // verification operations
       createVerification: async (verification) => {
-         const result = await db
-            .insert(tables.verification)
-            .values({
-               id: nanoid(),
-               value: nanoid(),
-               ...verification,
-               createdAt: new Date(),
-               updatedAt: new Date(),
-            })
-            .returning();
+         const values = {
+            id: nanoid(),
+            value: nanoid(),
+            ...verification,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+         };
+         if (isMysql) {
+            await db.insert(tables.verification).values(values);
+            const result = await db
+               .select()
+               .from(tables.verification)
+               .where(eq(tables.verification.id, values.id));
+            return result[0];
+         }
+         const result = await db.insert(tables.verification).values(values).returning();
          return result[0];
       },
 

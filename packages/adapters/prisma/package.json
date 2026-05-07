@@ -1,5 +1,5 @@
 {
-   "name": "@swift-auth/drizzle",
+   "name": "@swift-auth/prisma",
    "version": "0.1.0",
    "description": "",
    "keywords": [],
@@ -30,25 +30,15 @@
    "files": [
       "dist"
    ],
-   "dependencies": {
-      "nanoid": "^5.1.11"
-   },
+   "dependencies": {},
    "devDependencies": {
-      "@types/better-sqlite3": "^7.6.13",
       "@types/node": "^25.5.0",
-      "@types/pg": "^8.20.0",
-      "better-sqlite3": "^12.9.0",
-      "drizzle-kit": "^0.31.10",
-      "drizzle-orm": "latest",
-      "mysql2": "^3.22.3",
-      "pg": "^8.20.0",
       "swift-auth": "workspace:*",
       "tsup": "^8.5.1",
       "typescript": "^6.0.2",
       "vitest": "^4.1.2"
    },
    "peerDependencies": {
-      "drizzle-orm": ">=0.30.0",
       "swift-auth": "workspace:*"
    },
    "license": "ISC",
