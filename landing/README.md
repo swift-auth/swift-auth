@@ -15,14 +15,14 @@ Type-safe authentication for Node.js applications. Modular by design — works w
 
 ## Packages
 
-| Package               | Description                |
-| --------------------- | -------------------------- |
-| `swift-auth`          | Core authentication engine |
-| `@swift-auth/drizzle` | Drizzle ORM adapter        |
-| `@swift-auth/prisma`  | Prisma adapter             |
-| `@swift-auth/react`   | React client library       |
-| `@swift-auth/node`    | Node.js / Express handler  |
-| `@swift-auth/cli`     | CLI for schema generation  |
+| Package               | Description                                          |
+| --------------------- | ---------------------------------------------------- |
+| `swift-auth`          | Core authentication engine (`packages/core`)         |
+| `@swift-auth/drizzle` | Drizzle ORM adapter (`packages/adapters/drizzle`)    |
+| `@swift-auth/prisma`  | Prisma adapter (`packages/adapters/prisma`)          |
+| `@swift-auth/node`    | Node.js / Express handler (`packages/handlers/node`) |
+| `@swift-auth/react`   | React client library (`packages/react`)              |
+| `@swift-auth/cli`     | CLI for schema generation (`packages/cli`)           |
 
 ## Quick Start
 
@@ -57,17 +57,34 @@ app.listen(8000);
 
 Full documentation at [swift-auth.dev/docs](https://swift-auth.dev/docs).
 
+## Repository Structure
+
+.
+├── apps
+│ └── node # Express test app
+├── landing # Next.js documentation site
+├── packages
+│ ├── core # swift-auth core
+│ ├── adapters
+│ │ ├── drizzle # @swift-auth/drizzle
+│ │ └── prisma # @swift-auth/prisma
+│ ├── handlers
+│ │ └── node # @swift-auth/node
+│ ├── react # @swift-auth/react
+│ └── cli # @swift-auth/cli
+└── pnpm-workspace.yaml
+
 ## Documentation
 
-- [Installation](/docs/installation)
-- [Quick Start](/docs/quick-start)
-- [Database — Drizzle](/docs/database/drizzle)
-- [Database — Prisma](/docs/database/prisma)
-- [Email & Password](/docs/authentication/email-password)
-- [Google](/docs/authentication/google)
-- [GitHub](/docs/authentication/github)
-- [CLI](/docs/cli)
-- [Configuration Reference](/docs/configuration)
+- [Installation](landing/src/app/docs/installation/page.mdx)
+- [Quick Start](landing/src/app/docs/quick-start/page.mdx)
+- [Database — Drizzle](landing/src/app/docs/database/drizzle/page.mdx)
+- [Database — Prisma](landing/src/app/docs/database/prisma/page.mdx)
+- [Email & Password](landing/src/app/docs/authentication/email-password/page.mdx)
+- [Google](landing/src/app/docs/authentication/google/page.mdx)
+- [GitHub](landing/src/app/docs/authentication/github/page.mdx)
+- [CLI](landing/src/app/docs/cli/page.mdx)
+- [Configuration](landing/src/app/docs/configuration/page.tsx)
 
 ## License
 
