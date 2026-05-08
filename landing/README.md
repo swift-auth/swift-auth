@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Swift Auth
 
-## Getting Started
+Type-safe authentication for Node.js applications. Modular by design — works with the ORMs, databases, and frameworks you already use.
 
-First, run the development server:
+## Features
+
+- Email and password authentication with optional email verification
+- Social providers — Google and GitHub
+- Database adapters for Drizzle and Prisma
+- Supports PostgreSQL, MySQL, and SQLite
+- Framework handler for Express (Hono and Next.js coming soon)
+- React client library for session management
+- CLI for generating database schemas
+- Fully type-safe
+
+## Packages
+
+| Package               | Description                |
+| --------------------- | -------------------------- |
+| `swift-auth`          | Core authentication engine |
+| `@swift-auth/drizzle` | Drizzle ORM adapter        |
+| `@swift-auth/prisma`  | Prisma adapter             |
+| `@swift-auth/react`   | React client library       |
+| `@swift-auth/node`    | Node.js / Express handler  |
+| `@swift-auth/cli`     | CLI for schema generation  |
+
+## Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm add swift-auth @swift-auth/drizzle @swift-auth/node
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```ts
+import { SwiftAuth } from 'swift-auth';
+import { drizzleAdapter } from '@swift-auth/drizzle';
+import { db } from './db/index.js';
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+export const auth = new SwiftAuth({
+   baseUrl: 'http://localhost:8000',
+   emailAndPassword: { enabled: true },
+   database: drizzleAdapter({ db, provider: 'postgres' }),
+});
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```ts
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import { toNodeHandler } from '@swift-auth/node';
+import { auth } from './lib/auth.js';
 
-## Learn More
+const app = express();
+app.use(cookieParser());
+app.use(express.json());
+app.use(toNodeHandler(auth));
+app.listen(8000);
+```
 
-To learn more about Next.js, take a look at the following resources:
+Full documentation at [swift-auth.dev/docs](https://swift-auth.dev/docs).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Installation](/docs/installation)
+- [Quick Start](/docs/quick-start)
+- [Database — Drizzle](/docs/database/drizzle)
+- [Database — Prisma](/docs/database/prisma)
+- [Email & Password](/docs/authentication/email-password)
+- [Google](/docs/authentication/google)
+- [GitHub](/docs/authentication/github)
+- [CLI](/docs/cli)
+- [Configuration Reference](/docs/configuration)
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT

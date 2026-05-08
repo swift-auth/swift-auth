@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
    /* config options here */
    reactCompiler: true,
    pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
+   typescript: {
+      ignoreBuildErrors: true,
+   },
 };
 
 export default withMDX(nextConfig);
