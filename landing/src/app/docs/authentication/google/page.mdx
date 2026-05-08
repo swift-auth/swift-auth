@@ -124,7 +124,10 @@ import { googleProvider } from 'swift-auth/providers';
 
 export const auth = new SwiftAuth({
   baseUrl: '<http://localhost:8000>',
-  database: drizzleAdapter(db),
+  database: drizzleAdapter({
+    db,
+    provider: 'postgres', // 'postgres' | 'mysql' | 'sqlite'
+  }),
   socialProviders: {
     google: googleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,

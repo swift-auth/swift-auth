@@ -228,14 +228,17 @@ export default function Home() {
                      <CodeBlock
                         code={`import { SwiftAuth } from 'swift-auth';
 import { drizzleAdapter } from '@swift-auth/drizzle';
-
+import {drizzleDb} from "../db/drizzle.ts"
 import {
    googleProvider,
    gitHubProvider,
 } from 'swift-auth/providers';
 
 export const auth = new SwiftAuth({
-   database: drizzleAdapter(db),
+   database: drizzleAdapter({
+   db: drizzleDb,
+  provider: "postgres"
+}),
 
    emailAndPassword: {
       enabled: true,

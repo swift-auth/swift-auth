@@ -108,7 +108,10 @@ import { gitHubProvider } from 'swift-auth/providers';
 
 export const auth = new SwiftAuth({
   baseUrl: '<http://localhost:8000>',
-  database: drizzleAdapter(db),
+  database: drizzleAdapter({
+    db,
+    provider: 'postgres', // 'postgres' | 'mysql' | 'sqlite'
+}),
   socialProviders: {
     github: gitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,

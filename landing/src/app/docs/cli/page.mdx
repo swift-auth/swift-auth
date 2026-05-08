@@ -1,0 +1,280 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { CodeBlock } from '@/components/ui/CodeBlock';
+
+# CLI
+
+<div className="mt-4 max-w-[560px] text-lg leading-relaxed text-muted-foreground">
+   The Swift Auth CLI generates the database schema your app needs — straight from your auth config.
+</div>
+
+---
+
+## Installation
+
+<div className="mt-3 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   You can run the CLI directly without installing it globally.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <Tabs defaultValue="pnpm" className="w-full">
+      <div className="px-4 pt-3">
+         <TabsList className="h-auto gap-1.5 bg-transparent p-0">
+            <TabsTrigger
+               value="pnpm"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               pnpm
+            </TabsTrigger>
+            <TabsTrigger
+               value="npm"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               npm
+            </TabsTrigger>
+            <TabsTrigger
+               value="yarn"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               yarn
+            </TabsTrigger>
+            <TabsTrigger
+               value="bun"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               bun
+            </TabsTrigger>
+         </TabsList>
+      </div>
+      <TabsContent value="pnpm" className="m-0">
+         <CodeBlock code={`pnpm dlx @swift-auth/cli`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="npm" className="m-0">
+         <CodeBlock code={`npx @swift-auth/cli`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="yarn" className="m-0">
+         <CodeBlock code={`yarn dlx @swift-auth/cli`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="bun" className="m-0">
+         <CodeBlock code={`bunx @swift-auth/cli`} lang="bash" />
+      </TabsContent>
+   </Tabs>
+</div>
+
+## Commands
+
+### generate
+
+<div className="mt-3 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   Reads your auth config and generates the database schema for the adapter and provider you have
+   configured. Outputs four tables: <code>user</code>, <code>account</code>, <code>session</code>,
+   and <code>verification</code>.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <Tabs defaultValue="pnpm" className="w-full">
+      <div className="px-4 pt-3">
+         <TabsList className="h-auto gap-1.5 bg-transparent p-0">
+            <TabsTrigger
+               value="pnpm"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               pnpm
+            </TabsTrigger>
+            <TabsTrigger
+               value="npm"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               npm
+            </TabsTrigger>
+            <TabsTrigger
+               value="yarn"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               yarn
+            </TabsTrigger>
+            <TabsTrigger
+               value="bun"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               bun
+            </TabsTrigger>
+         </TabsList>
+      </div>
+      <TabsContent value="pnpm" className="m-0">
+         <CodeBlock code={`pnpm dlx @swift-auth/cli generate`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="npm" className="m-0">
+         <CodeBlock code={`npx @swift-auth/cli generate`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="yarn" className="m-0">
+         <CodeBlock code={`yarn dlx @swift-auth/cli generate`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="bun" className="m-0">
+         <CodeBlock code={`bunx @swift-auth/cli generate`} lang="bash" />
+      </TabsContent>
+   </Tabs>
+</div>
+
+---
+
+## Options
+
+### `--config`
+
+<div className="mt-3 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   Path to your auth config file, relative to the project root. Use this if your config is not in
+   one of the default locations.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <CodeBlock lang="bash" code={`npx @swift-auth/cli generate --config ./src/lib/auth.ts`} />
+</div>
+
+### `--output`
+
+<div className="mt-3 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   Path where the generated schema file should be written, relative to the project root. If a file
+   already exists at this path, its contents will be overwritten.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <CodeBlock lang="bash" code={`npx @swift-auth/cli generate --output ./src/db/auth-schema.ts`} />
+</div>
+
+<div className="mt-4 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   Both options can be combined.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <CodeBlock
+      lang="bash"
+      code={`npx @swift-auth/cli generate --config ./src/lib/auth.ts --output ./src/db/auth-schema.ts`}
+   />
+</div>
+
+---
+
+## Config file detection
+
+<div className="mt-3 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   When <code>--config</code> is not provided, the CLI looks for your auth config in these locations
+   automatically.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <CodeBlock
+      lang="bash"
+      code={`./src/lib/auth.ts
+./src/lib/auth.js
+./lib/auth.ts
+./lib/auth.js`}
+   />
+</div>
+
+<div className="mt-4 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   If your config is outside these paths, pass it explicitly with <code>--config</code>.
+</div>
+
+---
+
+## Output
+
+<div className="mt-3 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   On success, the CLI prints a summary showing the detected adapter, provider, and the path the
+   schema was written to.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <CodeBlock
+      lang="bash"
+      code={`✓ Schema generated successfully
+
+Adapter : drizzle-adapter
+Provider: postgres
+Output : src/db/auth-schema.ts`}
+/>
+
+</div>
+
+<div className="mt-6 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   Once the schema is generated, push it to your database using your ORM's migration tool.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <Tabs defaultValue="drizzle" className="w-full">
+      <div className=" border-border px-4 pt-3">
+         <TabsList className="h-auto gap-1.5 bg-transparent p-0">
+            <TabsTrigger
+               value="drizzle"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               Drizzle
+            </TabsTrigger>
+            <TabsTrigger
+               value="prisma"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               Prisma
+            </TabsTrigger>
+         </TabsList>
+      </div>
+      <TabsContent value="drizzle" className="m-0">
+         <CodeBlock code={`npx drizzle-kit push`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="prisma" className="m-0">
+         <CodeBlock code={`npx prisma db push`} lang="bash" />
+      </TabsContent>
+   </Tabs>
+</div>
+
+## Error reference
+
+<div className="mt-3 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   Common errors and how to fix them.
+</div>
+
+<div className="mt-5 space-y-4">
+   <div className="rounded-xl border border-border bg-card overflow-hidden">
+      <div className="border-b border-border px-5 py-3">
+         <span className="font-mono text-xs text-destructive">Could not find the auth config file</span>
+      </div>
+      <div className="px-5 py-3 text-sm text-muted-foreground">
+         The path passed to <code>--config</code> does not exist or is not a <code>.ts</code> or{' '}
+         <code>.js</code> file. Check the path is relative to your project root and the file
+         exists.
+      </div>
+   </div>
+
+<div className="rounded-xl border border-border bg-card overflow-hidden">
+   <div className="border-b border-border px-5 py-3">
+      <span className="font-mono text-xs text-destructive">
+         Could not locate your auth config file
+      </span>
+   </div>
+   <div className="px-5 py-3 text-sm text-muted-foreground">
+      No <code>--config</code> was provided and the CLI could not find a config in any of the
+      default locations. Either move your config to a default path or pass it explicitly with{' '}
+      <code>--config</code>.
+   </div>
+</div>
+
+<div className="rounded-xl border border-border bg-card overflow-hidden">
+   <div className="border-b border-border px-5 py-3">
+      <span className="font-mono text-xs text-destructive">Failed to load auth config</span>
+   </div>
+   <div className="px-5 py-3 text-sm text-muted-foreground">
+      The config file was found but could not be loaded. Make sure it has a default export.
+   </div>
+</div>
+
+   <div className="rounded-xl border border-border bg-card overflow-hidden">
+      <div className="border-b border-border px-5 py-3">
+         <span className="font-mono text-xs text-destructive">Failed to generate schema</span>
+      </div>
+      <div className="px-5 py-3 text-sm text-muted-foreground">
+         The adapter or provider in your config is not supported. Supported adapters are{' '}
+         <code>drizzle-adapter</code> and <code>prisma-adapter</code>. Supported providers are{' '}
+         <code>postgres</code>, <code>mysql</code>, and <code>sqlite</code>.
+      </div>
+   </div>
+</div>

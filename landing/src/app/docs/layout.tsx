@@ -18,8 +18,8 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
                <SidebarTrigger />
             </header>
 
-            <main className="mx-auto w-full max-w-4xl px-6 py-10">
-               <main className="mx-auto w-full max-w-4xl px-6 py-10">{children}</main>
+            <main className="mx-auto w-full max-w-4xl px-2 py-10">
+               <main className="mx-auto w-full max-w-4xl px-0 py-10">{children}</main>
             </main>
          </SidebarInset>
       </SidebarProvider>

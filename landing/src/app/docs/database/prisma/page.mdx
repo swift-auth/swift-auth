@@ -1,0 +1,484 @@
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { CodeBlock } from '@/components/ui/CodeBlock';
+import {
+   Table,
+   TableBody,
+   TableCell,
+   TableHead,
+   TableHeader,
+   TableRow,
+} from '@/components/ui/table';
+
+# Prisma Adapter
+
+<div className="mt-4 max-w-[560px] text-lg leading-relaxed text-muted-foreground">
+   Connect Swift Auth to your database using Prisma. Supports PostgreSQL, MySQL, and SQLite with a
+   single schema file.
+</div>
+
+---
+
+## Installation
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <Tabs defaultValue="pnpm" className="w-full">
+      <div className="px-4 pt-3">
+         <TabsList className="h-auto gap-1.5 bg-transparent p-0">
+            <TabsTrigger
+               value="pnpm"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               pnpm
+            </TabsTrigger>
+            <TabsTrigger
+               value="npm"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               npm
+            </TabsTrigger>
+            <TabsTrigger
+               value="yarn"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               yarn
+            </TabsTrigger>
+            <TabsTrigger
+               value="bun"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               bun
+            </TabsTrigger>
+         </TabsList>
+      </div>
+      <TabsContent value="pnpm" className="m-0">
+         <CodeBlock code={`pnpm add @swift-auth/prisma`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="npm" className="m-0">
+         <CodeBlock code={`npm install @swift-auth/prisma`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="yarn" className="m-0">
+         <CodeBlock code={`yarn add @swift-auth/prisma`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="bun" className="m-0">
+         <CodeBlock code={`bun add @swift-auth/prisma`} lang="bash" />
+      </TabsContent>
+   </Tabs>
+</div>
+
+## Setup
+
+<div className="mt-3 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   Prisma requires a driver adapter that matches your database. Install the one for your provider
+   alongside the Prisma client.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <Tabs defaultValue="postgres" className="w-full">
+      <div className=" border-border px-4 pt-3">
+         <TabsList className="h-auto gap-1.5 bg-transparent p-0">
+            <TabsTrigger
+               value="postgres"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               PostgreSQL
+            </TabsTrigger>
+            <TabsTrigger
+               value="mysql"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               MySQL
+            </TabsTrigger>
+            <TabsTrigger
+               value="sqlite"
+               className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background"
+            >
+               SQLite
+            </TabsTrigger>
+         </TabsList>
+      </div>
+      <TabsContent value="postgres" className="m-0">
+         <CodeBlock code={`pnpm add @prisma/adapter-pg`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="mysql" className="m-0">
+         <CodeBlock code={`pnpm add @prisma/adapter-mysql`} lang="bash" />
+      </TabsContent>
+      <TabsContent value="sqlite" className="m-0">
+         <CodeBlock code={`pnpm add @prisma/adapter-better-sqlite3`} lang="bash" />
+      </TabsContent>
+   </Tabs>
+</div>
+
+<div className="mt-6 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   Then set up your auth config. Instantiate the driver adapter and pass it into{' '}
+   <code>PrismaClient</code>, then hand both to <code>prismaAdapter</code>.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <Tabs defaultValue="postgres" className="w-full">
+      <div className=" border-border px-4 pt-3">
+         <TabsList className="h-auto gap-1.5 bg-transparent p-0">
+            <TabsTrigger value="postgres" className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background">PostgreSQL</TabsTrigger>
+            <TabsTrigger value="mysql" className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background">MySQL</TabsTrigger>
+            <TabsTrigger value="sqlite" className="rounded-md border border-transparent font-mono text-xs data-[state=active]:border-border data-[state=active]:bg-background">SQLite</TabsTrigger>
+         </TabsList>
+      </div>
+      <TabsContent value="postgres" className="m-0">
+         <div className="border-b border-border px-5 py-2.5">
+            <span className="font-mono text-xs text-muted-foreground">src/lib/auth.ts</span>
+         </div>
+         <CodeBlock
+            lang="ts"
+            code={`import { SwiftAuth } from 'swift-auth';
+import { prismaAdapter } from '@swift-auth/prisma';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '../generated/prisma/client.js';
+
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+const prisma = new PrismaClient({ adapter });
+
+export const auth = new SwiftAuth({
+  baseUrl: '<http://localhost:8000>',
+  database: prismaAdapter({
+    db: prisma,
+    provider: 'postgres',
+  }),
+});`}
+         />
+      </TabsContent>
+      <TabsContent value="mysql" className="m-0">
+         <div className="border-b border-border px-5 py-2.5">
+            <span className="font-mono text-xs text-muted-foreground">src/lib/auth.ts</span>
+         </div>
+         <CodeBlock
+            lang="ts"
+            code={`import { SwiftAuth } from 'swift-auth';
+import { prismaAdapter } from '@swift-auth/prisma';
+import { PrismaMySQL } from '@prisma/adapter-mysql';
+import { PrismaClient } from '../generated/prisma/client.js';
+
+const adapter = new PrismaMySQL({ connectionString: process.env.DATABASE_URL! });
+const prisma = new PrismaClient({ adapter });
+
+export const auth = new SwiftAuth({
+  baseUrl: '<http://localhost:8000>',
+  database: prismaAdapter({
+    db: prisma,
+    provider: 'mysql',
+  }),
+});`}
+         />
+      </TabsContent>
+      <TabsContent value="sqlite" className="m-0">
+         <div className="border-b border-border px-5 py-2.5">
+            <span className="font-mono text-xs text-muted-foreground">src/lib/auth.ts</span>
+         </div>
+         <CodeBlock
+            lang="ts"
+            code={`import { SwiftAuth } from 'swift-auth';
+import { prismaAdapter } from '@swift-auth/prisma';
+import { PrismaLibSQL } from '@prisma/adapter-better-sqlite3';
+import { PrismaClient } from '../generated/prisma/client.js';
+
+const adapter = new PrismaLibSQL({ url: process.env.DATABASE_URL! });
+const prisma = new PrismaClient({ adapter });
+
+export const auth = new SwiftAuth({
+  baseUrl: '<http://localhost:8000>',
+  database: prismaAdapter({
+    db: prisma,
+    provider: 'sqlite',
+  }),
+});`}
+         />
+      </TabsContent>
+   </Tabs>
+</div>
+
+---
+
+## Generate the schema
+
+<div className="mt-3 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   Run the CLI to generate the <code>schema.prisma</code> file. Unlike Drizzle, Prisma uses a single
+   schema for all providers — the CLI adjusts the timestamp types automatically based on your
+   configured provider.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <CodeBlock lang="bash" code={`npx @swift-auth/cli generate --output ./prisma/schema.prisma`} />
+</div>
+
+<div className="mt-4 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   Then generate the Prisma client and push the schema to your database.
+</div>
+
+<div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">
+   <CodeBlock lang="bash" code={`npx prisma generate\nnpx prisma db push`} />
+</div>
+
+---
+
+## Tables
+
+<div className="mt-3 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
+   The CLI generates four models. Timestamp types vary by provider — PostgreSQL uses{' '}
+   <code>@db.Timestamptz(3)</code>, MySQL uses <code>@db.DateTime(3)</code>, and SQLite uses the
+   default <code>DateTime</code>.
+</div>
+
+### User
+
+<div className="mt-4 rounded-xl border border-border bg-card overflow-hidden">
+   <Table>
+      <TableHeader>
+         <TableRow>
+            <TableHead>Field</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Notes</TableHead>
+         </TableRow>
+      </TableHeader>
+      <TableBody>
+         <TableRow>
+            <TableCell className="font-mono text-xs">id</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Primary key</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">name</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">email</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Unique</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">emailVerified</TableCell>
+            <TableCell className="font-mono text-xs">Boolean</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">image</TableCell>
+            <TableCell className="font-mono text-xs">String?</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Nullable</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">createdAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">updatedAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+      </TableBody>
+   </Table>
+</div>
+
+### Account
+
+<div className="mt-4 rounded-xl border border-border bg-card overflow-hidden">
+   <Table>
+      <TableHeader>
+         <TableRow>
+            <TableHead>Field</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Notes</TableHead>
+         </TableRow>
+      </TableHeader>
+      <TableBody>
+         <TableRow>
+            <TableCell className="font-mono text-xs">id</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Primary key</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">userId</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">
+               Relation → User (cascade delete)
+            </TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">accountId</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">providerId</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">password</TableCell>
+            <TableCell className="font-mono text-xs">String?</TableCell>
+            <TableCell className="text-xs text-muted-foreground">
+               Nullable, used for email/password auth
+            </TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">accessToken</TableCell>
+            <TableCell className="font-mono text-xs">String?</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Nullable</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">refreshToken</TableCell>
+            <TableCell className="font-mono text-xs">String?</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Nullable</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">accessTokenExpiresAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime?</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Nullable</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">refreshTokenExpiresAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime?</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Nullable</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">scope</TableCell>
+            <TableCell className="font-mono text-xs">String?</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Nullable</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">idToken</TableCell>
+            <TableCell className="font-mono text-xs">String?</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Nullable</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">createdAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">updatedAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+      </TableBody>
+   </Table>
+</div>
+
+### Session
+
+<div className="mt-4 rounded-xl border border-border bg-card overflow-hidden">
+   <Table>
+      <TableHeader>
+         <TableRow>
+            <TableHead>Field</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Notes</TableHead>
+         </TableRow>
+      </TableHeader>
+      <TableBody>
+         <TableRow>
+            <TableCell className="font-mono text-xs">id</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Primary key</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">userId</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">
+               Relation → User (cascade delete)
+            </TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">token</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Unique</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">expiresAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">ipAddress</TableCell>
+            <TableCell className="font-mono text-xs">String?</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Nullable</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">userAgent</TableCell>
+            <TableCell className="font-mono text-xs">String?</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Nullable</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">createdAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">updatedAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+      </TableBody>
+   </Table>
+</div>
+
+### Verification
+
+<div className="mt-4 rounded-xl border border-border bg-card overflow-hidden">
+   <Table>
+      <TableHeader>
+         <TableRow>
+            <TableHead>Field</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Notes</TableHead>
+         </TableRow>
+      </TableHeader>
+      <TableBody>
+         <TableRow>
+            <TableCell className="font-mono text-xs">id</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Primary key</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">identifier</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">value</TableCell>
+            <TableCell className="font-mono text-xs">String</TableCell>
+            <TableCell className="text-xs text-muted-foreground">
+               Not null, stores the verification token
+            </TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">expiresAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">createdAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-mono text-xs">updatedAt</TableCell>
+            <TableCell className="font-mono text-xs">DateTime</TableCell>
+            <TableCell className="text-xs text-muted-foreground">Not null</TableCell>
+         </TableRow>
+      </TableBody>
+   </Table>
+</div>
+
+---
+
+## Next Step
+
+<div className="mt-6 flex flex-wrap items-center gap-3">
+   <Button asChild size="lg">
+      <Link href="/docs/quick-start">Back to Quick Start</Link>
+   </Button>
+   <Button asChild variant="outline" size="lg">
+      <Link href="/docs/database/drizzle">Drizzle Adapter</Link>
+   </Button>
+</div>

@@ -5,7 +5,10 @@ const fullConfig = `export const auth = new SwiftAuth({
   baseUrl: 'http://localhost:8000',
 
   // database adapter — required
-  database: drizzleAdapter(db),
+  database: drizzleAdapter({
+    db,
+    provider: 'postgres', // 'postgres' | 'mysql' | 'sqlite'
+}),
 
   // email and password auth
   emailAndPassword: {

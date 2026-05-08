@@ -21,11 +21,20 @@ const gettingStarted = [
    { title: 'Quick Start', href: '/docs/quick-start' },
    { title: 'Providers', href: '/docs/providers' },
 ];
+
+const database = [
+   { title: 'Drizzle', href: '/docs/database/drizzle' },
+   { title: 'Prisma', href: '/docs/database/prisma' },
+];
+
 const authentication = [
    { title: 'Email & Password', href: '/docs/authentication/email-password' },
    { title: 'Google', href: '/docs/authentication/google' },
    { title: 'GitHub', href: '/docs/authentication/github' },
 ];
+
+const tooling = [{ title: 'CLI', href: '/docs/cli' }];
+
 const reference = [{ title: 'Configuration', href: '/docs/configuration' }];
 
 export function DocsSidebar() {
@@ -53,10 +62,39 @@ export function DocsSidebar() {
                </SidebarGroupContent>
             </SidebarGroup>
             <SidebarGroup>
+               <SidebarGroupLabel>Database</SidebarGroupLabel>
+               <SidebarGroupContent>
+                  <SidebarMenu>
+                     {database.map((item) => (
+                        <SidebarMenuItem key={item.href}>
+                           <SidebarMenuButton asChild isActive={pathname === item.href}>
+                              <Link href={item.href}>{item.title}</Link>
+                           </SidebarMenuButton>
+                        </SidebarMenuItem>
+                     ))}
+                  </SidebarMenu>
+               </SidebarGroupContent>
+            </SidebarGroup>
+
+            <SidebarGroup>
                <SidebarGroupLabel>Authentication</SidebarGroupLabel>
                <SidebarGroupContent>
                   <SidebarMenu>
                      {authentication.map((item) => (
+                        <SidebarMenuItem key={item.href}>
+                           <SidebarMenuButton asChild isActive={pathname === item.href}>
+                              <Link href={item.href}>{item.title}</Link>
+                           </SidebarMenuButton>
+                        </SidebarMenuItem>
+                     ))}
+                  </SidebarMenu>
+               </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarGroup>
+               <SidebarGroupLabel>Tooling</SidebarGroupLabel>
+               <SidebarGroupContent>
+                  <SidebarMenu>
+                     {tooling.map((item) => (
                         <SidebarMenuItem key={item.href}>
                            <SidebarMenuButton asChild isActive={pathname === item.href}>
                               <Link href={item.href}>{item.title}</Link>
@@ -82,7 +120,7 @@ export function DocsSidebar() {
             </SidebarGroup>
          </SidebarContent>
          <SidebarFooter className="border-t border-border p-4">
-            <Button className="w-full" asChild>
+            <Button className="w-full rounded-none" asChild>
                <a
                   href="https://github.com/your-org/swift-auth"
                   target="_blank"
