@@ -1,6 +1,6 @@
 {
    "name": "@authio/core",
-   "version": "0.1.0",
+   "version": "0.1.1",
    "description": "Type-safe authentication built for developers who want simplicity, flexibility, and control without hidden abstractions or framework lock-in.",
    "author": "Dipan Chakraborty",
    "license": "MIT",
@@ -16,6 +16,9 @@
       "authio"
    ],
    "private": false,
+   "publishConfig": {
+      "access": "public"
+   },
    "type": "module",
    "main": "./dist/index.cjs",
    "module": "./dist/index.js",

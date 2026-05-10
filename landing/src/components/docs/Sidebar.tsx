@@ -43,7 +43,7 @@ export function DocsSidebar() {
       <Sidebar>
          <SidebarHeader className="border-b border-border px-6 py-4">
             <Link href="/">
-               <Image src="/logo.svg" alt="Authio" width={124} height={124} />
+               <Image src="/logo.svg" alt="Authio" width={90} height={90} />
             </Link>
          </SidebarHeader>
          <SidebarContent>

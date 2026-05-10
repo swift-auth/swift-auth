@@ -1,9 +1,23 @@
 {
    "name": "@authio/prisma",
-   "version": "0.1.0",
-   "description": "",
-   "keywords": [],
-   "author": "",
+   "version": "0.1.1",
+   "author": "Dipan Chakraborty",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/dipan-ck/authio.git"
+   },
+   "license": "MIT",
+   "keywords": [
+      "auth",
+      "authentication",
+      "jwt",
+      "oauth",
+      "authio"
+   ],
+   "publishConfig": {
+      "access": "public"
+   },
+   "description": " A Prisma adapter for Authio",
    "private": false,
    "type": "module",
    "main": "./dist/index.cjs",
@@ -46,8 +60,7 @@
       "vitest": "^4.1.2"
    },
    "peerDependencies": {
-      "@authio/core": "workspace:*"
+      "@authio/core": ">=0.1.0"
    },
-   "license": "ISC",
    "packageManager": "pnpm@10.33.0"
 }

@@ -12,7 +12,7 @@ Authio gives you a clean, composable API to add authentication to any Node.js ap
 
 | Package           | Description                |
 | ----------------- | -------------------------- |
-| `authio`          | Core authentication engine |
+| `@authio/core`    | Core authentication engine |
 | `@authio/drizzle` | Drizzle ORM adapter        |
 | `@authio/prisma`  | Prisma adapter             |
 | `@authio/node`    | Express / Node.js handler  |
@@ -22,7 +22,7 @@ Authio gives you a clean, composable API to add authentication to any Node.js ap
 ## Quick Start
 
 ```bash
-pnpm add authio @authio/drizzle @authio/node
+pnpm add @authio/core @authio/drizzle @authio/node
 ```
 
 **1. Create your auth instance**

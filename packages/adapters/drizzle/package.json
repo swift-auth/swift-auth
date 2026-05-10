@@ -1,9 +1,23 @@
 {
    "name": "@authio/drizzle",
-   "version": "0.1.0",
-   "description": "",
-   "keywords": [],
-   "author": "",
+   "version": "0.1.1",
+   "author": "Dipan Chakraborty",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/dipan-ck/authio.git"
+   },
+   "license": "MIT",
+   "keywords": [
+      "auth",
+      "authentication",
+      "jwt",
+      "oauth",
+      "authio"
+   ],
+   "publishConfig": {
+      "access": "public"
+   },
+   "description": "A Drizzle adapter for authio",
    "private": false,
    "type": "module",
    "main": "./dist/index.cjs",
@@ -49,8 +63,7 @@
    },
    "peerDependencies": {
       "drizzle-orm": ">=0.30.0",
-      "@authio/core": "workspace:*"
+      "@authio/core": ">=0.1.0"
    },
-   "license": "ISC",
    "packageManager": "pnpm@10.33.0"
 }

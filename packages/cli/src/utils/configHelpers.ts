@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import type { Authio, AuthioConfig } from '@authio/core';
 
 import { createJiti } from 'jiti';
 
@@ -28,9 +27,10 @@ export function validateInputConfigPath(relativePath: string) {
 }
 // user should do default export of the config otherwise throw error from the cli
 export async function loadConfig(configPath: string) {
-   const mod = (await jiti.import(configPath)) as { default?: Authio };
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   const mod = (await jiti.import(configPath)) as { default: any };
    if (!mod?.default) {
       return null;
    }
-   return mod.default.config as AuthioConfig;
+   return mod.default.config;
 }

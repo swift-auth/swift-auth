@@ -17,6 +17,9 @@ export function AnimatedIllustration() {
             .dash2  { stroke-dasharray: 5 5; animation: dashFlow 1.4s linear infinite reverse; }
             @keyframes float    { 0%,100%{ transform: translateY(0px) } 50%{ transform: translateY(-5px) } }
             @keyframes dashFlow { to { stroke-dashoffset: -20; } }
+            @media (prefers-reduced-motion: reduce) {
+               .float,.float2,.float3,.float4,.float5,.dash,.dash2 { animation: none; }
+            }
          `}</style>
 
          <defs>
@@ -40,9 +43,7 @@ export function AnimatedIllustration() {
             </marker>
          </defs>
 
-         {/* ═══════════════════════════════════════════
-             YOUR APP — browser mockup card
-         ═══════════════════════════════════════════ */}
+         {/* YOUR APP */}
          <g className="float">
             <rect
                x="8"
@@ -54,7 +55,6 @@ export function AnimatedIllustration() {
                stroke="#282828"
                strokeWidth="1"
             />
-            {/* browser chrome strip */}
             <rect
                x="18"
                y="140"
@@ -68,7 +68,6 @@ export function AnimatedIllustration() {
             <circle cx="29" cy="151" r="3" fill="#343434" />
             <circle cx="40" cy="151" r="3" fill="#343434" />
             <circle cx="51" cy="151" r="3" fill="#343434" />
-            {/* url bar */}
             <rect
                x="60"
                y="146"
@@ -79,23 +78,29 @@ export function AnimatedIllustration() {
                stroke="#343434"
                strokeWidth="0.5"
             />
-            {/* content skeleton */}
             <rect x="18" y="171" width="72" height="5" rx="2.5" fill="#343434" />
             <rect x="18" y="182" width="54" height="5" rx="2.5" fill="#343434" opacity="0.6" />
-            {/* sign in button — primary yellow */}
-            <rect x="18" y="196" width="62" height="22" rx="6" fill="#fff988" />
+            {/* sign in button — uses your CSS var for primary color */}
+            <rect
+               x="18"
+               y="196"
+               width="62"
+               height="22"
+               rx="6"
+               fill="var(--primary-foreground)"
+               opacity="0.9"
+            />
             <text
                x="49"
                y="211"
                fontFamily="var(--font-mono)"
                fontSize="9"
                fontWeight="600"
-               fill="#171717"
+               fill="var(--primary)"
                textAnchor="middle"
             >
                Sign in
             </text>
-            {/* label below card */}
             <text
                x="70"
                y="258"
@@ -108,13 +113,14 @@ export function AnimatedIllustration() {
             </text>
          </g>
 
+         {/* auth req / token arrows */}
          <line
             className="dash"
             x1="135"
             y1="168"
             x2="194"
             y2="168"
-            stroke="#a1a1a1"
+            stroke="#525252"
             strokeWidth="1.2"
             markerEnd="url(#arr)"
          />
@@ -134,7 +140,7 @@ export function AnimatedIllustration() {
             y1="184"
             x2="135"
             y2="184"
-            stroke="#a1a1a1"
+            stroke="#525252"
             strokeWidth="1.2"
             markerEnd="url(#arr)"
          />
@@ -149,12 +155,12 @@ export function AnimatedIllustration() {
             token
          </text>
 
-         {/* traveling dots — yellow, matching primary */}
-         <circle r="2.5" fill="#fff988" opacity="0">
+         {/* traveling dots */}
+         <circle r="2.5" fill="var(--primary-foreground)" opacity="0">
             <animateMotion dur="1.4s" repeatCount="indefinite" path="M135 168 L194 168" />
             <animate attributeName="opacity" values="0;1;0" dur="1.4s" repeatCount="indefinite" />
          </circle>
-         <circle r="2.5" fill="#fff988" opacity="0">
+         <circle r="2.5" fill="var(--primary-foreground)" opacity="0">
             <animateMotion
                dur="1.4s"
                repeatCount="indefinite"
@@ -170,33 +176,66 @@ export function AnimatedIllustration() {
             />
          </circle>
 
+         {/* AUTHIO CORE */}
          <g className="float2">
-            {/* outer card */}
             <rect
                x="200"
-               y="130"
+               y="118"
                width="125"
-               height="80"
+               height="96"
                rx="14"
                fill="#171717"
                stroke="#282828"
                strokeWidth="1"
             />
-
-            {/* logo.svg — the only brand element inside the card */}
             <image
                href="/logo.svg"
                x="215"
-               y="130"
-               width="104"
-               height="80"
+               y="122"
+               width="95"
+               height="52"
                preserveAspectRatio="xMidYMid meet"
             />
+            {/* package pills */}
+            <rect x="212" y="180" width="36" height="14" rx="7" fill="#282828" />
+            <text
+               x="230"
+               y="191"
+               fontFamily="var(--font-mono)"
+               fontSize="8"
+               fill="#a1a1a1"
+               textAnchor="middle"
+            >
+               JWT
+            </text>
+            <rect x="254" y="180" width="44" height="14" rx="7" fill="#282828" />
+            <text
+               x="276"
+               y="191"
+               fontFamily="var(--font-mono)"
+               fontSize="8"
+               fill="#a1a1a1"
+               textAnchor="middle"
+            >
+               OAuth
+            </text>
+            <rect x="304" y="180" width="14" height="14" rx="7" fill="#282828" />
+            <text
+               x="311"
+               y="191"
+               fontFamily="var(--font-mono)"
+               fontSize="8"
+               fill="#525252"
+               textAnchor="middle"
+            >
+               …
+            </text>
          </g>
 
+         {/* persist arrow */}
          <line
             x1="260"
-            y1="214"
+            y1="218"
             x2="260"
             y2="270"
             stroke="#343434"
@@ -204,25 +243,22 @@ export function AnimatedIllustration() {
             strokeDasharray="4 4"
             markerEnd="url(#arr)"
          />
-         <text x="278" y="246" fontFamily="var(--font-mono)" fontSize="9" fill="#737373">
+         <text x="278" y="248" fontFamily="var(--font-mono)" fontSize="9" fill="#737373">
             persist
          </text>
 
-         {/* ═══════════════════════════════════════════
-             DATABASE card
-         ═══════════════════════════════════════════ */}
+         {/* DATABASE */}
          <g className="float3">
             <rect
                x="192"
                y="272"
                width="136"
-               height="56"
+               height="62"
                rx="10"
                fill="#171717"
                stroke="#282828"
                strokeWidth="1"
             />
-            {/* cylinder top */}
             <ellipse
                cx="218"
                cy="289"
@@ -232,30 +268,31 @@ export function AnimatedIllustration() {
                stroke="#343434"
                strokeWidth="1.2"
             />
-            {/* cylinder sides */}
-            <line x1="205" y1="289" x2="205" y2="305" stroke="#343434" strokeWidth="1.2" />
-            <line x1="231" y1="289" x2="231" y2="305" stroke="#343434" strokeWidth="1.2" />
-            {/* cylinder bottom */}
+            <line x1="205" y1="289" x2="205" y2="309" stroke="#343434" strokeWidth="1.2" />
+            <line x1="231" y1="289" x2="231" y2="309" stroke="#343434" strokeWidth="1.2" />
             <ellipse
                cx="218"
-               cy="305"
+               cy="309"
                rx="13"
                ry="4.5"
                fill="#171717"
                stroke="#343434"
                strokeWidth="1.2"
             />
-            {/* row divider */}
-            <line x1="207" y1="296" x2="229" y2="296" stroke="#282828" strokeWidth="0.8" />
-            {/* text */}
-            <text x="238" y="292" fontFamily="var(--font-mono)" fontSize="9.5" fill="#fafafa">
+            <line x1="207" y1="298" x2="229" y2="298" stroke="#282828" strokeWidth="0.8" />
+            <text x="238" y="294" fontFamily="var(--font-mono)" fontSize="9.5" fill="#fafafa">
                sessions
             </text>
-            <text x="238" y="307" fontFamily="var(--font-mono)" fontSize="8.5" fill="#a1a1a1">
+            <text x="238" y="310" fontFamily="var(--font-mono)" fontSize="8.5" fill="#737373">
                users · tokens
+            </text>
+            {/* adapter labels */}
+            <text x="238" y="326" fontFamily="var(--font-mono)" fontSize="7.5" fill="#525252">
+               drizzle · prisma
             </text>
          </g>
 
+         {/* provider connector lines */}
          <line
             x1="326"
             y1="144"
@@ -287,9 +324,7 @@ export function AnimatedIllustration() {
             markerEnd="url(#arr)"
          />
 
-         {/* ═══════════════════════════════════════════
-             GOOGLE provider card
-         ═══════════════════════════════════════════ */}
+         {/* GOOGLE */}
          <g className="float">
             <rect
                x="360"
@@ -312,14 +347,12 @@ export function AnimatedIllustration() {
             <text x="407" y="85" fontFamily="var(--font-mono)" fontSize="10" fill="#fafafa">
                Google
             </text>
-            <text x="407" y="98" fontFamily="var(--font-mono)" fontSize="9" fill="#a1a1a1">
+            <text x="407" y="98" fontFamily="var(--font-mono)" fontSize="9" fill="#737373">
                OAuth 2.0
             </text>
          </g>
 
-         {/* ═══════════════════════════════════════════
-             GITHUB provider card
-         ═══════════════════════════════════════════ */}
+         {/* GITHUB */}
          <g className="float4">
             <rect
                x="360"
@@ -342,14 +375,12 @@ export function AnimatedIllustration() {
             <text x="407" y="165" fontFamily="var(--font-mono)" fontSize="10" fill="#fafafa">
                GitHub
             </text>
-            <text x="407" y="178" fontFamily="var(--font-mono)" fontSize="9" fill="#a1a1a1">
+            <text x="407" y="178" fontFamily="var(--font-mono)" fontSize="9" fill="#737373">
                OAuth 2.0
             </text>
          </g>
 
-         {/* ═══════════════════════════════════════════
-             MICROSOFT provider card
-         ═══════════════════════════════════════════ */}
+         {/* MICROSOFT */}
          <g className="float5">
             <rect
                x="360"
@@ -372,18 +403,17 @@ export function AnimatedIllustration() {
             <text x="407" y="245" fontFamily="var(--font-mono)" fontSize="10" fill="#fafafa">
                Microsoft
             </text>
-            <text x="407" y="258" fontFamily="var(--font-mono)" fontSize="9" fill="#a1a1a1">
+            <text x="407" y="258" fontFamily="var(--font-mono)" fontSize="9" fill="#737373">
                OAuth 2.0
             </text>
          </g>
 
-         {/* more providers hint */}
          <text
             x="416"
             y="308"
             fontFamily="var(--font-mono)"
             fontSize="10"
-            fill="#737373"
+            fill="#525252"
             textAnchor="middle"
          >
             + more providers

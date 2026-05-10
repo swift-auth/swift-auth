@@ -1,6 +1,23 @@
 {
    "name": "@authio/cli",
-   "version": "0.1.0",
+   "version": "0.1.1",
+   "description": "CLI for generating database schemas for Authio",
+   "author": "Dipan Chakraborty",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/dipan-ck/authio.git"
+   },
+   "keywords": [
+      "auth",
+      "authentication",
+      "jwt",
+      "oauth",
+      "authio"
+   ],
+   "publishConfig": {
+      "access": "public"
+   },
+   "license": "MIT",
    "private": false,
    "type": "module",
    "bin": {
@@ -22,7 +39,7 @@
    },
    "devDependencies": {
       "@types/node": "^25.5.0",
-      "@authio/core": "workspace:*",
+      "@authio/core": ">=0.1.0",
       "tsup": "^8.5.1",
       "typescript": "^6.0.2",
       "vitest": "^4.1.2"

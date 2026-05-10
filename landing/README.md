@@ -17,7 +17,7 @@ Type-safe authentication for Node.js applications. Modular by design — works w
 
 | Package           | Description                                          |
 | ----------------- | ---------------------------------------------------- |
-| `authio`          | Core authentication engine (`packages/core`)         |
+| `@authio/core`    | Core authentication engine (`packages/core`)         |
 | `@authio/drizzle` | Drizzle ORM adapter (`packages/adapters/drizzle`)    |
 | `@authio/prisma`  | Prisma adapter (`packages/adapters/prisma`)          |
 | `@authio/node`    | Node.js / Express handler (`packages/handlers/node`) |
@@ -27,7 +27,7 @@ Type-safe authentication for Node.js applications. Modular by design — works w
 ## Quick Start
 
 ```bash
-pnpm add authio @authio/drizzle @authio/node
+pnpm add @authio/core @authio/drizzle @authio/node
 ```
 
 ```ts

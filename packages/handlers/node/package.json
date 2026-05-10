@@ -1,8 +1,23 @@
 {
    "name": "@authio/node",
-   "version": "0.1.0",
+   "version": "0.1.1",
+   "author": "Dipan Chakraborty",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/dipan-ck/authio.git"
+   },
+   "keywords": [
+      "auth",
+      "authentication",
+      "jwt",
+      "oauth",
+      "authio"
+   ],
    "description": "",
    "private": false,
+   "publishConfig": {
+      "access": "public"
+   },
    "type": "module",
    "main": "./dist/index.cjs",
    "module": "./dist/index.js",
@@ -27,8 +42,6 @@
    "files": [
       "dist"
    ],
-   "keywords": [],
-   "author": "",
    "license": "MIT",
    "packageManager": "pnpm@10.33.0",
    "dependencies": {},
@@ -42,7 +55,7 @@
       "vitest": "^4.1.2"
    },
    "peerDependencies": {
-      "@authio/core": "workspace:*",
+      "@authio/core": ">=0.1.0",
       "express": "^5.0.0"
    }
 }

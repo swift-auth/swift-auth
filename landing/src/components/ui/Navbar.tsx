@@ -16,12 +16,12 @@ export default function Navbar() {
          <div className="mx-auto max-w-6xl px-6 h-14 flex items-center justify-between">
             <div className="flex items-center gap-8">
                <Link href="/" className="flex items-center">
-                  <Image src="/logo.svg" alt="authio" width={110} height={110} priority />
+                  <Image src="/logo.svg" alt="authio" width={90} height={90} priority />
                </Link>
             </div>
             <Button asChild variant="outline">
                <Link
-                  href=""
+                  href="https://github.com/dipan-ck/authio#"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2"
