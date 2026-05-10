@@ -4,14 +4,20 @@
    "private": true,
    "scripts": {
       "build": "pnpm -r build",
-      "test:e2e": " pnpm --filter swift-auth-cli test:e2e",
-      "test": "pnpm -r test",
+      "test:e2e": "pnpm --filter swift-auth-cli test:e2e",
+      "test": "pnpm -r --sequential test",
       "clean": "pnpm -r exec rimraf dist",
       "lint": "eslint .",
-      "lint:fix": "pnpm -r eslint . --fix",
-      "format": "prettier \"**/*.{ts,tsx,js,json,md}\" --write"
+      "lint:fix": "eslint . --fix",
+      "format": "prettier \"**/*.{ts,tsx,js,json,md}\" --write",
+      "format:check": "prettier \"**/*.{ts,tsx,js,json,md}\" --check",
+      "typecheck": "pnpm -r typecheck",
+      "changeset": "changeset",
+      "version": "changeset version",
+      "release": "pnpm build && changeset publish"
    },
    "devDependencies": {
+      "@changesets/cli": "^2.31.0",
       "@eslint/js": "^10.0.1",
       "@typescript-eslint/eslint-plugin": "^8.58.0",
       "@typescript-eslint/parser": "^8.58.0",

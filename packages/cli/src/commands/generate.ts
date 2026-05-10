@@ -111,8 +111,8 @@ export const generate = defineCommand({
          console.log('');
          console.log('✓ Schema generated successfully');
          console.log('');
-         console.log(`Adapter : ${config.database.id}`);
-         console.log(`Provider: ${config.database.provider}`);
+         console.log(`Adapter : ${config?.database.id}`);
+         console.log(`Provider: ${config?.database.provider}`);
          console.log(`Output  : ${writtenPath}`);
          console.log('');
       } catch (error) {

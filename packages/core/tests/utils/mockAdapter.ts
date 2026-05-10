@@ -4,6 +4,8 @@ export const mockAdapter: DatabaseAdapter = {
    id: 'drizzle-adapter',
    provider: 'postgres',
 
+   deleteUser: async (id) => {},
+
    createUser: async (user) => ({
       id: '1',
       createdAt: new Date(),

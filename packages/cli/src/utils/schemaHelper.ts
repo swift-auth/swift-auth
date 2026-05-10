@@ -4,6 +4,7 @@ import path from 'path';
 import { generateDrizzleSchema } from '../generators/drizzle.js';
 import { generatePrismaSchema } from '../generators/prisma.js';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function generateSchema(config: any) {
    if (config.database.id === 'drizzle-adapter') {
       return generateDrizzleSchema(config.database.provider);
@@ -16,6 +17,7 @@ export function generateSchema(config: any) {
    return null;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function writeSchemaToFile(providedPath?: string, config?: any) {
    if (!config) {
       throw new Error('Config is required');

@@ -122,4 +122,4 @@ Contributions are welcome. Please read [CONTRIBUTING.md](./CONTRIBUTING.md) befo
 
 ## License
 
-MIT — see [LICENSE](./LICENSE)
+MIT — see [LICENSE](./LICENSE.md)

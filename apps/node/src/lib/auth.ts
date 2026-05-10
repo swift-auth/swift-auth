@@ -1,9 +1,9 @@
 import 'dotenv/config.js';
 import { SwiftAuth } from 'swift-auth';
 import { gitHubProvider, googleProvider } from 'swift-auth/providers';
-import { prismaAdapter } from '@swift-auth/prisma';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../generated/prisma/client.js';
+// import { prismaAdapter } from '@swift-auth/prisma';
+// import { PrismaPg } from '@prisma/adapter-pg';
+// import { PrismaClient } from '../generated/prisma/client.js';
 import { db } from '../db/index.js';
 import { drizzleAdapter } from '@swift-auth/drizzle';
 
@@ -13,10 +13,10 @@ export const testTokens = {
    latestResetToken: '',
 };
 
-const connectionString = `${process.env.DATABASE_URL}`;
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
-
+// const connectionString = `${process.env.DATABASE_URL}`;
+// const adapter = new PrismaPg({ connectionString });
+// const prisma = new PrismaClient({ adapter });
+//
 const auth = new SwiftAuth({
    baseUrl: 'http://localhost:8000',
    emailAndPassword: {

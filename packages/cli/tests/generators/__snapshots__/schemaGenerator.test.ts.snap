@@ -183,71 +183,61 @@ export const sessionTable = t.sqliteTable('session', {
 exports[`schema generators > prisma schema generator > should generate mysql prisma schema 1`] = `
 "// This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
 }
-
 datasource db {
   provider = "mysql"
 }
-
 model User {
   id            String    @id
   name          String
   email         String    @unique
   emailVerified Boolean
   image         String?
-  createdAt     DateTime  @db.Timestamptz(3)
-  updatedAt     DateTime  @db.Timestamptz(3)
+  createdAt DateTime @db.DateTime(3)
+  updatedAt DateTime @db.DateTime(3)
   accounts      Account[]
   sessions      Session[]
-
   @@map("user")
 }
-
 model Account {
   id                    String    @id
-  user                  User      @relation(fields: [userId], references: [id])
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                String
   accountId             String
   providerId            String
   accessToken           String?
   refreshToken          String?
-  accessTokenExpiresAt  DateTime? @db.Timestamptz(3)
-  refreshTokenExpiresAt DateTime? @db.Timestamptz(3)
+  accessTokenExpiresAt  DateTime? @db.DateTime(3)
+  refreshTokenExpiresAt DateTime? @db.DateTime(3)
   scope                 String?
   idToken               String?
   password              String?
-  createdAt             DateTime  @db.Timestamptz(3)
-  updatedAt             DateTime  @db.Timestamptz(3)
-
+  createdAt DateTime @db.DateTime(3)
+  updatedAt DateTime @db.DateTime(3)
   @@map("account")
 }
-
 model Session {
   id        String   @id
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   token     String   @unique
-  expiresAt DateTime @db.Timestamptz(3)
+  expiresAt DateTime @db.DateTime(3)
   ipAddress String?
   userAgent String?
-  createdAt DateTime @db.Timestamptz(3)
-  updatedAt DateTime @db.Timestamptz(3)
-
+  createdAt DateTime @db.DateTime(3)
+  updatedAt DateTime @db.DateTime(3)
   @@map("session")
 }
-
 model Verification {
   id         String   @id
   identifier String
   value      String
-  expiresAt  DateTime @db.Timestamptz(3)
-  createdAt  DateTime @db.Timestamptz(3)
-  updatedAt  DateTime @db.Timestamptz(3)
-
+  expiresAt DateTime @db.DateTime(3)
+  createdAt DateTime @db.DateTime(3)
+  updatedAt DateTime @db.DateTime(3)
   @@map("verification")
 }"
 `;
@@ -255,33 +245,28 @@ model Verification {
 exports[`schema generators > prisma schema generator > should generate postgres prisma schema 1`] = `
 "// This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
 }
-
 datasource db {
   provider = "postgresql"
 }
-
 model User {
   id            String    @id
   name          String
   email         String    @unique
   emailVerified Boolean
   image         String?
-  createdAt     DateTime  @db.Timestamptz(3)
-  updatedAt     DateTime  @db.Timestamptz(3)
+  createdAt DateTime @db.Timestamptz(3)
+  updatedAt DateTime @db.Timestamptz(3)
   accounts      Account[]
   sessions      Session[]
-
   @@map("user")
 }
-
 model Account {
   id                    String    @id
-  user                  User      @relation(fields: [userId], references: [id])
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                String
   accountId             String
   providerId            String
@@ -292,15 +277,13 @@ model Account {
   scope                 String?
   idToken               String?
   password              String?
-  createdAt             DateTime  @db.Timestamptz(3)
-  updatedAt             DateTime  @db.Timestamptz(3)
-
+  createdAt DateTime @db.Timestamptz(3)
+  updatedAt DateTime @db.Timestamptz(3)
   @@map("account")
 }
-
 model Session {
   id        String   @id
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   token     String   @unique
   expiresAt DateTime @db.Timestamptz(3)
@@ -308,18 +291,15 @@ model Session {
   userAgent String?
   createdAt DateTime @db.Timestamptz(3)
   updatedAt DateTime @db.Timestamptz(3)
-
   @@map("session")
 }
-
 model Verification {
   id         String   @id
   identifier String
   value      String
-  expiresAt  DateTime @db.Timestamptz(3)
-  createdAt  DateTime @db.Timestamptz(3)
-  updatedAt  DateTime @db.Timestamptz(3)
-
+  expiresAt DateTime @db.Timestamptz(3)
+  createdAt DateTime @db.Timestamptz(3)
+  updatedAt DateTime @db.Timestamptz(3)
   @@map("verification")
 }"
 `;
@@ -327,71 +307,61 @@ model Verification {
 exports[`schema generators > prisma schema generator > should generate sqlite prisma schema 1`] = `
 "// This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
 }
-
 datasource db {
   provider = "sqlite"
 }
-
 model User {
   id            String    @id
   name          String
   email         String    @unique
   emailVerified Boolean
   image         String?
-  createdAt     DateTime  @db.Timestamptz(3)
-  updatedAt     DateTime  @db.Timestamptz(3)
+  createdAt DateTime
+  updatedAt DateTime
   accounts      Account[]
   sessions      Session[]
-
   @@map("user")
 }
-
 model Account {
   id                    String    @id
-  user                  User      @relation(fields: [userId], references: [id])
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                String
   accountId             String
   providerId            String
   accessToken           String?
   refreshToken          String?
-  accessTokenExpiresAt  DateTime? @db.Timestamptz(3)
-  refreshTokenExpiresAt DateTime? @db.Timestamptz(3)
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
   scope                 String?
   idToken               String?
   password              String?
-  createdAt             DateTime  @db.Timestamptz(3)
-  updatedAt             DateTime  @db.Timestamptz(3)
-
+  createdAt DateTime
+  updatedAt DateTime
   @@map("account")
 }
-
 model Session {
   id        String   @id
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   token     String   @unique
-  expiresAt DateTime @db.Timestamptz(3)
+  expiresAt DateTime
   ipAddress String?
   userAgent String?
-  createdAt DateTime @db.Timestamptz(3)
-  updatedAt DateTime @db.Timestamptz(3)
-
+  createdAt DateTime
+  updatedAt DateTime
   @@map("session")
 }
-
 model Verification {
   id         String   @id
   identifier String
   value      String
-  expiresAt  DateTime @db.Timestamptz(3)
-  createdAt  DateTime @db.Timestamptz(3)
-  updatedAt  DateTime @db.Timestamptz(3)
-
+  expiresAt DateTime
+  createdAt DateTime
+  updatedAt DateTime
   @@map("verification")
 }"
 `;

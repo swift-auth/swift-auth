@@ -7,14 +7,12 @@ describe('loadConfig', () => {
    it('loads a real SwiftAuth config instance', async () => {
       const filePath = path.resolve(process.cwd(), 'tests/fixtures/auth.ts');
 
-      const auth = await loadConfig(filePath);
-      expect(auth).toBeDefined();
+      const config = await loadConfig(filePath);
+      expect(config).toBeDefined();
 
-      expect(auth.config).toBeDefined();
+      expect(config.baseUrl).toBe('http://test.com');
 
-      expect(auth.config.baseUrl).toBe('http://test.com');
-
-      expect(auth.config.database.provider).toBe('postgres');
-      expect(auth.config.database.id).toBe('drizzle-adapter');
+      expect(config.database.provider).toBe('postgres');
+      expect(config.database.id).toBe('drizzle-adapter');
    });
 });

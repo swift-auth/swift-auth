@@ -1,6 +1,5 @@
-import { SwiftAuth, SwiftAuthError, User } from 'swift-auth';
+import { SwiftAuth, SwiftAuthError } from 'swift-auth';
 import { NextFunction, Request, Response } from 'express';
-import { Session } from 'node:inspector';
 
 // ── error helper ───────────────────────────────────────────────────────────────
 function sendError(res: Response, err: unknown) {

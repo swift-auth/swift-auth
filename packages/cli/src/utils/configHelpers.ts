@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import type { SwiftAuth, SwiftAuthConfig } from 'swift-auth';
 
 import { createJiti } from 'jiti';
 
@@ -26,12 +27,10 @@ export function validateInputConfigPath(relativePath: string) {
    return null;
 }
 // user should do default export of the config otherwise throw error from the cli
-export async function loadConfig(path: string) {
-   const mod = await jiti.import(path);
-
-   if (!mod) {
+export async function loadConfig(configPath: string) {
+   const mod = (await jiti.import(configPath)) as { default?: SwiftAuth };
+   if (!mod?.default) {
       return null;
    }
-
-   return mod?.default.config;
+   return mod.default.config as SwiftAuthConfig;
 }
