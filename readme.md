@@ -1,3 +1,5 @@
+![Authio banner](./assets/banner.jpg)
+
 # authio
 
 Type-safe authentication built for developers who want simplicity, flexibility, and control without hidden abstractions or framework lock-in.
