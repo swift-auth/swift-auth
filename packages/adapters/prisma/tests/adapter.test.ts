@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import { PrismaClient } from '../src/generated/prisma/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { prismaAdapter } from '../src/prisma-adapter.js';
-import type { DatabaseAdapter } from 'authio';
+import type { DatabaseAdapter } from '@authio/core';
 
 const connectionString = 'postgresql://test_user:test_password@localhost:5433/test_db';
 const ar = new PrismaPg({ connectionString });

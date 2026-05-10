@@ -3,6 +3,7 @@
    "version": "1.0.0",
    "description": "",
    "main": "index.js",
+   "private": true,
    "module": "module",
    "scripts": {
       "dev": "tsx watch src/index.ts",
@@ -23,7 +24,7 @@
       "drizzle-orm": "^0.45.2",
       "express": "^5.2.1",
       "pg": "^8.20.0",
-      "authio": "workspace:*"
+      "@authio/core": "workspace:*"
    },
    "devDependencies": {
       "@authio/cli": "workspace:*",

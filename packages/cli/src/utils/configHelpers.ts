@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import type { Authio, AuthioConfig } from 'authio';
+import type { Authio, AuthioConfig } from '@authio/core';
 
 import { createJiti } from 'jiti';
 

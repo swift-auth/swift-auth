@@ -40,13 +40,13 @@
       "@types/pg": "^8.20.0",
       "pg": "^8.20.0",
       "prisma": "^7.8.0",
-      "authio": "workspace:*",
+      "@authio/core": "workspace:*",
       "tsup": "^8.5.1",
       "typescript": "^6.0.2",
       "vitest": "^4.1.2"
    },
    "peerDependencies": {
-      "authio": "workspace:*"
+      "@authio/core": "workspace:*"
    },
    "license": "ISC",
    "packageManager": "pnpm@10.33.0"

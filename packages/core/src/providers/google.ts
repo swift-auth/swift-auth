@@ -1,5 +1,5 @@
 import type { OAuthProvider, OAuthTokens, OAuthUser } from './types.js';
-import * as z from 'zod';
+
 import { AuthioError } from '../core/authioError.js';
 
 const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
@@ -13,15 +13,6 @@ export interface GoogleConfig {
    prompt?: 'consent' | 'select_account' | 'none' | 'login';
    accessType?: 'online' | 'offline';
 }
-
-export const googleConfigSchema = z.object({
-   clientId: z.string(),
-   clientSecret: z.string(),
-   redirectUrl: z.string(),
-   scopes: z.array(z.string()).default(['openid', 'email', 'profile']),
-   prompt: z.enum(['consent', 'select_account', 'none', 'login']).default('consent'),
-   accessType: z.enum(['online', 'offline']).default('offline'),
-});
 
 interface GoogleTokenResponse {
    access_token: string;
@@ -40,19 +31,27 @@ interface GoogleIdTokenPayload {
    picture: string;
 }
 
-export function googleProvider(config: GoogleConfig): OAuthProvider {
-   const parsed = googleConfigSchema.parse(config);
+export function googleProvider(userConfig: GoogleConfig): OAuthProvider {
+   const config: Required<GoogleConfig> = {
+      clientId: userConfig.clientId,
+      clientSecret: userConfig.clientSecret,
+      redirectUrl: userConfig.redirectUrl,
+      scopes: userConfig.scopes ?? ['openid', 'email', 'profile'],
+      prompt: userConfig.prompt ?? 'consent',
+      accessType: userConfig.accessType ?? 'offline',
+   };
+
    return {
       id: 'google',
       getAuthUrl(state: string, redirectUri: string): string {
          const params = new URLSearchParams({
-            client_id: parsed.clientId,
+            client_id: config.clientId,
             redirect_uri: redirectUri,
             response_type: 'code',
-            scope: parsed.scopes.join(' '),
+            scope: config.scopes.join(' '),
             state,
-            access_type: parsed.accessType,
-            prompt: parsed.prompt,
+            access_type: config.accessType,
+            prompt: config.prompt,
          });
          return `${GOOGLE_AUTH_URL}?${params.toString()}`;
       },
@@ -64,8 +63,8 @@ export function googleProvider(config: GoogleConfig): OAuthProvider {
             },
             body: new URLSearchParams({
                code,
-               client_id: parsed.clientId,
-               client_secret: parsed.clientSecret,
+               client_id: config.clientId,
+               client_secret: config.clientSecret,
                redirect_uri: redirectUri,
                grant_type: 'authorization_code',
             }),

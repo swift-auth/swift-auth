@@ -1,6 +1,6 @@
 import 'dotenv/config.js';
-import { Authio } from 'authio';
-import { gitHubProvider, googleProvider } from 'authio/providers';
+import { Authio } from '@authio/core';
+import { gitHubProvider, googleProvider } from '@authio/core/providers';
 // import { prismaAdapter } from '@authio/prisma';
 // import { PrismaPg } from '@prisma/adapter-pg';
 // import { PrismaClient } from '../generated/prisma/client.js';

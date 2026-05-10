@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
-import { AuthioConfig } from '../types/config.js';
-import { ParsedAuthioConfig } from '../validator/config.validator.js';
+import { AuthioConfig, ParsedAuthioConfig } from '../types/config.js';
+
 import { AuthioError } from './authioError.js';
 import { Session, User } from '../types/auth.js';
 

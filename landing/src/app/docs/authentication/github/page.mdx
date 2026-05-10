@@ -101,7 +101,7 @@ GITHUB_CLIENT_SECRET=your_github_client_secret`}
   </div>
   <CodeBlock
     lang="ts"
-    code={`import { Authio } from 'authio';
+    code={`import { Authio } from '@authio/core';
 import { drizzleAdapter } from '@authio/drizzle';
 import { db } from '../db/index.js';
 import { gitHubProvider } from 'authio/providers';
@@ -166,8 +166,8 @@ scopes: ['read:user', 'user:email'],
    </div>
    <div className="text-sm leading-relaxed text-muted-foreground">
       GitHub users can set their email address to private. When this happens, the user profile
-      endpoint returns <code>null</code> for the email field. Authio handles this automatically
-      — it makes a second request to the GitHub emails endpoint to fetch the user's verified primary
+      endpoint returns <code>null</code> for the email field. Authio handles this automatically — it
+      makes a second request to the GitHub emails endpoint to fetch the user's verified primary
       email. The <code>user:email</code> scope is what grants access to that endpoint, so removing
       it will break sign-in for users with private emails.
    </div>
@@ -209,8 +209,8 @@ scopes: ['read:user', 'user:email'],
          2
       </div>
       <div className="text-sm leading-relaxed text-muted-foreground pt-0.5">
-         Authio exchanges the code for an access token. GitHub does not return a refresh token
-         or ID token.
+         Authio exchanges the code for an access token. GitHub does not return a refresh token or ID
+         token.
       </div>
    </div>
    <div className="flex gap-3">
@@ -218,8 +218,8 @@ scopes: ['read:user', 'user:email'],
          3
       </div>
       <div className="text-sm leading-relaxed text-muted-foreground pt-0.5">
-         Authio fetches the user's profile from the GitHub API. If the email is private, it
-         makes a second request to the emails endpoint and picks the verified primary email.
+         Authio fetches the user's profile from the GitHub API. If the email is private, it makes a
+         second request to the emails endpoint and picks the verified primary email.
       </div>
    </div>
    <div className="flex gap-3">

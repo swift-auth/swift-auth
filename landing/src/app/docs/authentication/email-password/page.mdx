@@ -3,8 +3,8 @@ import { CodeBlock } from '@/components/ui/CodeBlock';
 # Email & Password
 
 <div className="mt-4 max-w-[560px] text-lg leading-relaxed text-muted-foreground">
-   Authio has built-in email and password authentication with support for email verification,
-   auto sign-in, password reset, and configurable password rules.
+   Authio has built-in email and password authentication with support for email verification, auto
+   sign-in, password reset, and configurable password rules.
 </div>
 
 ## Basic setup
@@ -20,7 +20,7 @@ import { CodeBlock } from '@/components/ui/CodeBlock';
    </div>
 <CodeBlock
    lang="ts"
-   code={`import { Authio } from 'authio';
+   code={`import { Authio } from '@authio/core';
 import { drizzleAdapter } from '@authio/drizzle';
 import { db } from '../db/index.js';
 
@@ -124,13 +124,13 @@ forgotPasswordCallback: async ({ name, email, resetToken }) => {},
 ## Password reset
 
 <div className="mt-3 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
-   To enable password reset, provide a <code>forgotPasswordCallback</code>. Authio generates a
-   reset token and passes it to your callback — you deliver it however you want.
+   To enable password reset, provide a <code>forgotPasswordCallback</code>. Authio generates a reset
+   token and passes it to your callback — you deliver it however you want.
 </div>
 
 <div className="mt-4 max-w-[560px] text-sm leading-relaxed text-muted-foreground">
-   If no account exists for the given email, Authio returns a success response anyway. This
-   prevents leaking which emails are registered.
+   If no account exists for the given email, Authio returns a success response anyway. This prevents
+   leaking which emails are registered.
 </div>
 
 <div className="mt-5 rounded-xl border border-border bg-card overflow-hidden">

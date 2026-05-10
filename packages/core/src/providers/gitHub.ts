@@ -6,7 +6,6 @@ user have attached to their GitHub account that's why we have 2 enpoints and 2 s
 
 */
 import type { OAuthProvider, OAuthTokens, OAuthUser } from './types.js';
-import * as z from 'zod';
 import { AuthioError } from '../core/authioError.js';
 
 const GITHUB_AUTH_URL = 'https://github.com/login/oauth/authorize';
@@ -20,13 +19,6 @@ export interface GitHubConfig {
    scopes?: string[];
    redirectUrl: string;
 }
-
-export const gitHubConfigSchema = z.object({
-   clientId: z.string(),
-   redirectUrl: z.string(),
-   clientSecret: z.string(),
-   scopes: z.array(z.string()).default(['read:user', 'user:email']),
-});
 
 interface GitHubTokenResponse {
    access_token: string;
@@ -47,15 +39,21 @@ interface GitHubEmail {
    verified: boolean;
 }
 
-export function gitHubProvider(config: GitHubConfig): OAuthProvider {
-   const parsed = gitHubConfigSchema.parse(config);
+export function gitHubProvider(userConfig: GitHubConfig): OAuthProvider {
+   const config = {
+      clientId: userConfig.clientId,
+      redirectUrl: userConfig.redirectUrl,
+      clientSecret: userConfig.clientSecret,
+      scopes: userConfig.scopes ?? ['read:user', 'user:email'],
+   };
+
    return {
       id: 'github',
       getAuthUrl(state: string, redirectUri: string): string {
          const params = new URLSearchParams({
-            client_id: parsed.clientId,
+            client_id: config.clientId,
             redirect_uri: redirectUri,
-            scope: parsed.scopes.join(' '),
+            scope: config.scopes.join(' '),
             state,
          });
          return `${GITHUB_AUTH_URL}?${params.toString()}`;
@@ -69,8 +67,8 @@ export function gitHubProvider(config: GitHubConfig): OAuthProvider {
             },
             body: new URLSearchParams({
                code,
-               client_id: parsed.clientId,
-               client_secret: parsed.clientSecret,
+               client_id: config.clientId,
+               client_secret: config.clientSecret,
                redirect_uri: redirectUri,
             }),
          });

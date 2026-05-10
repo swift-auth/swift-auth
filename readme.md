@@ -29,7 +29,7 @@ pnpm add authio @authio/drizzle @authio/node
 
 ```ts
 // src/lib/auth.ts
-import { Authio } from 'authio';
+import { Authio } from '@authio/core';
 import { drizzleAdapter } from '@authio/drizzle';
 import { db } from '../db/index.js';
 

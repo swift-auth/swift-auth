@@ -227,7 +227,7 @@ export default function Home() {
 
                      {/* Code */}
                      <CodeBlock
-                        code={`import { Authio } from 'authio';
+                        code={`import { Authio } from '@authio/core';
 import { drizzleAdapter } from '@authio/drizzle';
 import {drizzleDb} from "../db/drizzle.ts"
 import {

@@ -1,4 +1,4 @@
-import { Authio, AuthioError } from 'authio';
+import { Authio, AuthioError } from '@authio/core';
 import { NextFunction, Request, Response } from 'express';
 
 // ── error helper ───────────────────────────────────────────────────────────────

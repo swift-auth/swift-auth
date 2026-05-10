@@ -14,7 +14,7 @@ import mysql from 'mysql2/promise';
 import { drizzle as sqliteDrizzle } from 'drizzle-orm/better-sqlite3';
 
 import { drizzleAdapter } from '../src/drizzle-adapter.js';
-import type { DatabaseAdapter } from 'authio';
+import type { DatabaseAdapter } from '@authio/core';
 
 // ---------------------------------------------------------------------------
 // DB connections

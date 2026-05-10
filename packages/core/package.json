@@ -1,12 +1,12 @@
 {
-   "name": "authio",
+   "name": "@authio/core",
    "version": "0.1.0",
    "description": "Type-safe authentication built for developers who want simplicity, flexibility, and control without hidden abstractions or framework lock-in.",
    "author": "Dipan Chakraborty",
    "license": "MIT",
    "repository": {
       "type": "git",
-      "url": "https://github.com/authio/authio"
+      "url": "https://github.com/dipan-ck/authio.git"
    },
    "keywords": [
       "auth",
@@ -60,7 +60,6 @@
       "vitest": "^4.1.2"
    },
    "dependencies": {
-      "bcryptjs": "^3.0.3",
-      "zod": "^4.3.6"
+      "bcryptjs": "^3.0.3"
    }
 }

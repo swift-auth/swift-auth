@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import type { DrizzleAdapterOptions, Providers } from './types.js';
-import type { DatabaseAdapter } from 'authio';
+import type { DatabaseAdapter } from '@authio/core';
 import { and, eq } from 'drizzle-orm';
 import * as sqlSchema from './schemas/sql.js';
 import * as postgresSchema from './schemas/postgres.js';
