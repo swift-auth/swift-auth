@@ -10,10 +10,12 @@ import { resetPassword } from './api/resetPassword.api.js';
 import { getSession } from './api/session.api.js';
 import { signout } from './api/signout.api.js';
 import { verifyEmail } from './api/verifyEmail.api.js';
+import { createSchemas } from './schemas/schema.js';
 
 export class Authio {
    readonly config: ParsedAuthioConfig;
    api: ApiInterface;
+   readonly schema: ReturnType<typeof createSchemas>;
 
    constructor(config: AuthioConfig) {
       if (!config.database) throw new Error('Database adapter is not defined');
@@ -71,5 +73,6 @@ export class Authio {
          deleteUser: (payload) => deleteUser(payload, this.config),
          signout: (payload) => signout(payload, this.config),
       };
+      this.schema = createSchemas(this.config);
    }
 }
