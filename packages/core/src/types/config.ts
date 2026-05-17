@@ -36,6 +36,10 @@ export interface CookieConfig {
    domain?: string;
 }
 
+interface Internal {
+   logError?: boolean;
+}
+
 export interface AuthioConfig {
    baseUrl: string;
    session?: SessionConfig;
@@ -43,6 +47,7 @@ export interface AuthioConfig {
    database: DatabaseAdapter;
    socialProviders?: SocialProvidersConfig;
    cookies?: CookieConfig;
+   internal?: Internal;
 }
 
 export type ParsedAuthioConfig = {
@@ -77,6 +82,7 @@ export type ParsedAuthioConfig = {
    };
 
    internal: {
+      logError: boolean;
       oauth: {
          supportedOauthProviders: string[];
          oauthStateCookie: {

@@ -16,6 +16,6 @@ export async function getSession(ctx: Authio, req: Request, res: Response) {
       const apiRes = await ctx.api.getSession({ token });
       return res.status(200).json(apiRes);
    } catch (err) {
-      return sendError(res, err);
+      return sendError(res, err, ctx.config.internal.logError);
    }
 }

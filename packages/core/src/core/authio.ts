@@ -52,6 +52,7 @@ export class Authio {
               }
             : undefined,
          internal: {
+            logError: config.internal?.logError ?? false,
             oauth: {
                supportedOauthProviders: ['google', 'github'],
                oauthStateCookie: {

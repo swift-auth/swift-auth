@@ -12,10 +12,10 @@ import { verifyEmail } from './verifyEmail.js';
 import { Request, Response } from 'express';
 
 export const handlerTable: HandlerTable<Request, Response> = {
-   '/api/signup': {
+   '/api/auth/signup': {
       POST: emailSignUp,
    },
-   '/api/signin': {
+   '/api/auth/signin': {
       POST: emailSignIn,
    },
    '/api/auth/verify-email': {

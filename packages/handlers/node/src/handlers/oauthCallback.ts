@@ -60,6 +60,6 @@ export async function oauthCallback(
 
       return res.redirect(apiRes.redirectUrl);
    } catch (err) {
-      return sendError(res, err);
+      return sendError(res, err, ctx.config.internal.logError);
    }
 }

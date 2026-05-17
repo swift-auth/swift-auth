@@ -8,8 +8,8 @@ and easier.
 */
 
 export type PathTypes =
-   | '/api/signup'
-   | '/api/signin'
+   | '/api/auth/signup'
+   | '/api/auth/signin'
    | '/api/auth/verify-email'
    | '/api/auth/forgot-password'
    | '/api/auth/reset-password'
@@ -29,11 +29,11 @@ type OauthHandler<Req, Res> = (
 ) => Promise<unknown>;
 
 export interface HandlerTable<Req, Res> {
-   '/api/signup': {
+   '/api/auth/signup': {
       POST: Handler<Req, Res>;
    };
 
-   '/api/signin': {
+   '/api/auth/signin': {
       POST: Handler<Req, Res>;
    };
 

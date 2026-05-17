@@ -17,6 +17,6 @@ export async function forgotPassword(ctx: Authio, req: Request, res: Response) {
       // always 200 regardless — prevents user enumeration
       return res.status(200).json(apiRes);
    } catch (err) {
-      return sendError(res, err);
+      return sendError(res, err, ctx.config.internal.logError);
    }
 }

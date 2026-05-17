@@ -7,21 +7,10 @@ export async function emailSignUp(
    payload: EmailSignUpPayload,
    ctx: ParsedAuthioConfig,
 ): EmailSignUpApiResponse {
-   if (!payload.name || !payload.email || !payload.password) {
-      throw new AuthioError('MISSING_FIELDS', 'plesse fill all the missing fields');
-   }
-
    if (!ctx.emailAndPassword?.enabled) {
       throw new AuthioError(
          'EMAIL_PASSWORD_DISABLED',
          'Enable emailAndPassword in your config to use email signup',
-      );
-   }
-
-   if (payload.password.length < ctx.emailAndPassword.minPasswordLength) {
-      throw new AuthioError(
-         'PASSWORD_TOO_SHORT',
-         `Password must be at least ${ctx.emailAndPassword.minPasswordLength} characters`,
       );
    }
 

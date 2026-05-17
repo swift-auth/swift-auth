@@ -30,6 +30,6 @@ export async function oauthSignin(
 
       return res.redirect(authUrl);
    } catch (err) {
-      return sendError(res, err);
+      return sendError(res, err, ctx.config.internal.logError);
    }
 }

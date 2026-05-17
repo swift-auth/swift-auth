@@ -13,10 +13,10 @@ const auth = new Authio({
       autoSignIn: false,
       verifyEmail: true,
       verificationCallback: async (data) => {
-         console.log(data.verificationToken);
+    
       },
       forgotPasswordCallback: async (data) => {
-         console.log(data.resetToken);
+    
       },
    },
 });

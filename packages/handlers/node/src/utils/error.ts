@@ -1,8 +1,8 @@
 import { AuthioError } from '@authio/core';
 import { Response } from 'express';
 
-export function sendError(res: Response, err: unknown) {
-   console.error(err);
+export function sendError(res: Response, err: unknown, logError: boolean) {
+   if (logError) console.log(err);
 
    if (AuthioError.isZodError(err)) {
       return res.status(400).json(AuthioError.formatZodError(err));

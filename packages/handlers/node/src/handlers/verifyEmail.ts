@@ -27,6 +27,6 @@ export async function verifyEmail(ctx: Authio, req: Request, res: Response) {
 
       return res.status(200).json(apiRes);
    } catch (err) {
-      return sendError(res, err);
+      return sendError(res, err, ctx.config.internal.logError);
    }
 }
