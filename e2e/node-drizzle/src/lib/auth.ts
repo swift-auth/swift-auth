@@ -19,7 +19,7 @@ const auth = new Authio({
       },
    },
    internal: {
-    logError: true
+    logError: false
 }
 });
 export default auth;

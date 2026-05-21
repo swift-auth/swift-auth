@@ -12,12 +12,12 @@ const server = setupNodeServer({
    provider: 'postgres',
    database: 'drizzle',
 });
-beforeAll(async () => {
-   await server.spinUp();
+beforeAll(() => {
+   server.spinUp();
 });
 
-afterAll(async () => {
-   await server.tearDown();
+afterAll(() => {
+   server.tearDown();
 });
 
 // ─── helpers ───────────────────────────────────────────────────────────────

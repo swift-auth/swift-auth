@@ -1,19 +1,19 @@
-export function drizzleTemplatesGenerator(provider: string, database: string) {
-   if (database === 'drizzle' && provider === 'postgres')
+export function prismaTemplatesGenerator(provider: string, database: string) {
+   if (database === 'prisma' && provider === 'postgres')
       return {
-         authTemplate: DRIZZLE_POSTGRES_AUTH_CONFIG,
+         authTemplate: PRISMA_POSTGRES_AUTH_CONFIG,
          dbTemplate: DRIZZLE_DB_POSTGRES_TEMPLATE,
          configTemplate: DRIZZLE_POSTGRES_CONFIG_TEMPLATE,
       };
 
-   if (database === 'drizzle' && provider === 'mysql')
+   if (database === 'prisma' && provider === 'mysql')
       return {
          authTemplate: DRIZZLE_MYSQL_AUTH_CONFIG,
          dbTemplate: DRIZZLE_DB_MYSQL_TEMPLATE,
          configTemplate: DRIZZLE_MYSQL_CONFIG_TEMPLATE,
       };
 
-   if (database === 'drizzle' && provider === 'sqlite')
+   if (database === 'prisma' && provider === 'sqlite')
       return {
          authTemplate: DRIZZLE_SQLITE_AUTH_CONFIG,
          dbTemplate: DRIZZLE_DB_SQLITE_TEMPLATE,
@@ -22,11 +22,11 @@ export function drizzleTemplatesGenerator(provider: string, database: string) {
 }
 
 // ─── postgres ──────────────────────────────────────────────────────────────
-const DRIZZLE_POSTGRES_AUTH_CONFIG = `import { Authio } from '@authio/core';
-import { drizzleAdapter } from '@authio/drizzle';
+const PRISMA_POSTGRES_AUTH_CONFIG = `import { Authio } from '@authio/core';
+import { prismaAdapter } from '@authio/prisma';
 import { db } from '../db/index.js';
 const auth = new Authio({
-   database: drizzleAdapter({
+   database: prismaAdapter({
       db,
       provider: 'postgres',
    }),
@@ -45,7 +45,7 @@ const auth = new Authio({
 });
 export default auth;`;
 
-const DRIZZLE_DB_POSTGRES_TEMPLATE = `import 'dotenv/config';
+const PRISMA_DB_POSTGRES_TEMPLATE = `import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 export const db = drizzle(process.env.POSTGRES_URL!);`;
 

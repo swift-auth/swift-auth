@@ -3,8 +3,6 @@ import path from 'node:path';
 import { writeFileSync } from 'node:fs';
 import { drizzleTemplatesGenerator } from './utils/drizzleTemplates.js';
 import { execSync } from 'node:child_process';
-import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
-import { db } from './db/index.js';
 
 interface SetupServerConfigType {
    database: 'prisma' | 'drizzle';
@@ -76,25 +74,14 @@ export function setupNodeServer(config: SetupServerConfigType) {
          });
       },
 
-      async migrateDb() {
-         if (config.provider === 'sqlite') {
-            const { db } = await import('./db/index.js');
-            const { migrate } = await import('drizzle-orm/better-sqlite3/migrator');
-
-            migrate(db, {
-               migrationsFolder: './drizzle',
-            });
-
-            return;
-         }
-
+      migrateDb() {
          execSync('npx drizzle-kit push --force', {
             cwd: projectRoot,
             stdio: 'pipe',
          });
       },
 
-      async tearDown() {
+      tearDown() {
          execSync('pnpm drizzle-kit drop', {
             cwd: projectRoot,
          });
@@ -105,24 +92,28 @@ export function setupNodeServer(config: SetupServerConfigType) {
          console.log('Teardown went Successfull');
       },
 
-      async spinUp() {
+      spinUp() {
+         console.log(
+            `Spinning up server and db's for database: ${config.database} & provider: ${config.provider} `,
+         );
          if (config.provider !== 'sqlite') {
             this.startDockerContainer();
             this.waitForDb();
 
-            // console.log('Docker containers for postgres and mysql has started');
+            console.log(`Docker containers for ${config.provider} started`);
          }
 
          this.drizzleSetup();
-         // console.log('Generating necessary templates');
+         console.log('Successfully generated all required templates');
 
          this.genarateSchema();
-         // console.log('generating schema');
+         console.log('successfully generated schema');
 
-         await this.migrateDb();
-         // console.log('Database schema Migration is successfull');
+         this.migrateDb();
+         console.log('successfully  executed migrations');
 
          this.startServer();
+         console.log('successfully started node server....');
 
          return;
       },
