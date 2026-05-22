@@ -3,6 +3,7 @@ import path from 'node:path';
 import { writeFileSync } from 'node:fs';
 import { drizzleTemplatesGenerator } from './utils/drizzleTemplates.js';
 import { execSync } from 'node:child_process';
+import { prismaTemplatesGenerator } from './utils/prismaTemplates.js';
 
 interface SetupServerConfigType {
    database: 'prisma' | 'drizzle';
@@ -15,7 +16,8 @@ export function setupNodeServer(config: SetupServerConfigType) {
    const drizzlDbPath = path.resolve(import.meta.dirname, 'db/index.ts');
    const drizzleConfigFile = path.join(projectRoot, 'drizzle.config.ts');
    const repoRoot = path.resolve(import.meta.dirname, '../../../');
-
+   const prismaInstanceFilePath = path.resolve(projectRoot, 'src/lib/prisma.ts');
+   const prismaConfigFile = path.resolve(projectRoot, 'prisma.config.ts');
    return {
       startDockerContainer: () => {
          execSync('docker compose up -d --wait', {
@@ -66,7 +68,19 @@ export function setupNodeServer(config: SetupServerConfigType) {
          writeFileSync(drizzleConfigFile, templates?.configTemplate);
       },
 
-      genarateSchema: () => {
+      prismaSetup: () => {
+         execSync('rm -rf src/generated/prisma', {
+            cwd: projectRoot,
+            stdio: 'pipe',
+         });
+
+         const templates = prismaTemplatesGenerator(config.provider, config.database)!;
+         writeFileSync(authFilePath, templates?.authio);
+         writeFileSync(prismaInstanceFilePath, templates?.dbInstance);
+         writeFileSync(prismaConfigFile, templates.prismaConfig);
+      },
+
+      generateSchema: () => {
          execSync('npx @authio/cli generate', {
             cwd: projectRoot,
 
@@ -75,18 +89,39 @@ export function setupNodeServer(config: SetupServerConfigType) {
       },
 
       migrateDb() {
-         execSync('npx drizzle-kit push --force', {
-            cwd: projectRoot,
-            stdio: 'pipe',
-         });
+         if (config.database == 'prisma') {
+            execSync('npx prisma generate', {
+               cwd: projectRoot,
+               stdio: 'pipe',
+            });
+            execSync('npx prisma db push --force-reset', {
+               cwd: projectRoot,
+               stdio: 'pipe',
+            });
+         }
+
+         if (config.database == 'drizzle') {
+            execSync('npx drizzle-kit push --force', {
+               cwd: projectRoot,
+               stdio: 'pipe',
+            });
+         }
       },
 
       tearDown() {
-         execSync('pnpm drizzle-kit drop', {
-            cwd: projectRoot,
-         });
-
          if (config.provider === 'sqlite') return;
+
+         if (config.database == 'prisma') {
+            // execSync('npx prisma db drop', {
+            //    cwd: projectRoot,
+            // });
+         }
+
+         if (config.database == 'drizzle') {
+            execSync('npx drizzle-kit drop', {
+               cwd: projectRoot,
+            });
+         }
 
          this.stopDockerContainer();
          console.log('Teardown went Successfull');
@@ -103,10 +138,17 @@ export function setupNodeServer(config: SetupServerConfigType) {
             console.log(`Docker containers for ${config.provider} started`);
          }
 
-         this.drizzleSetup();
+         if (config.database == 'drizzle') {
+            this.drizzleSetup();
+         }
+
+         if (config.database == 'prisma') {
+            this.prismaSetup();
+         }
+
          console.log('Successfully generated all required templates');
 
-         this.genarateSchema();
+         this.generateSchema();
          console.log('successfully generated schema');
 
          this.migrateDb();

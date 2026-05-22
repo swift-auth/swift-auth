@@ -28,8 +28,9 @@
    "dependencies": {
       "@authio/core": "workspace:*",
       "@authio/drizzle": "workspace:*",
-      "@authio/prisma": "workspace:*",
       "@authio/node": "workspace:*",
+      "@authio/prisma": "workspace:*",
+      "@prisma/adapter-mariadb": "^7.8.0",
       "@prisma/adapter-pg": "^7.8.0",
       "@prisma/client": "^7.8.0",
       "better-sqlite3": "^12.9.0",

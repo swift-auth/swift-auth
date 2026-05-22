@@ -1,10 +1,12 @@
 import { Authio } from '@authio/core';
-import { drizzleAdapter } from '@authio/drizzle';
-import { db } from '../db/index.js';
+import { prismaAdapter } from '@authio/prisma';
+
+import { prisma } from '../lib/prisma.js';
+
 const auth = new Authio({
-   database: drizzleAdapter({
-      db,
-      provider: 'sqlite',
+   database: prismaAdapter({
+      db: prisma,
+      provider: 'postgres',
    }),
    baseUrl: `http://localhost:${process.env.PORT!}`,
    emailAndPassword: {
@@ -18,8 +20,5 @@ const auth = new Authio({
     
       },
    },
-   internal: {
-    logError: false
-}
 });
 export default auth;
