@@ -9,5 +9,6 @@ export default defineConfig({
       sequence: {
          concurrent: false,
       },
+      pool: 'forks',
    },
 });

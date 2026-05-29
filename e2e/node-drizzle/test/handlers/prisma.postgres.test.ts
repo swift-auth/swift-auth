@@ -13,14 +13,14 @@ const server = setupNodeServer({
    provider: 'postgres',
    database: 'prisma',
 });
-beforeAll(() => {
-   server.spinUp();
+beforeAll(async () => {
+   await server.spinUp();
    BASE_URL = auth.config.baseUrl;
    COOKIE_NAME = auth.config.cookies.name;
 });
 
-afterAll(() => {
-   server.tearDown();
+afterAll(async () => {
+   await server.tearDown();
 });
 
 // ─── helpers ───────────────────────────────────────────────────────────────

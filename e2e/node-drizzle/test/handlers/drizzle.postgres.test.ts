@@ -1,8 +1,8 @@
 import auth from '../../src/lib/auth';
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { setupNodeServer } from '../../src/setupServer.js';
-const BASE_URL = auth.config.baseUrl;
-const COOKIE_NAME = auth.config.cookies.name;
+let BASE_URL: string;
+let COOKIE_NAME: string;
 
 // shared state
 let verificationToken = '';
@@ -12,12 +12,14 @@ const server = setupNodeServer({
    provider: 'postgres',
    database: 'drizzle',
 });
-beforeAll(() => {
-   server.spinUp();
+beforeAll(async () => {
+   await server.spinUp();
+   BASE_URL = auth.config.baseUrl;
+   COOKIE_NAME = auth.config.cookies.name;
 });
 
-afterAll(() => {
-   server.tearDown();
+afterAll(async () => {
+   await server.tearDown();
 });
 
 // ─── helpers ───────────────────────────────────────────────────────────────
